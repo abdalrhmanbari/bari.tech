@@ -50,12 +50,6 @@ All copy is data-driven — no content is hardcoded inside components:
 | `src/data/education.ts`   | Education cards                                                 |
 | `src/data/contact.ts`     | Contact heading, blurb, direct links                           |
 
-### Swapping the portrait
-
-`public/portrait.svg` is a placeholder. Drop a real photo in `public/` (e.g.
-`portrait.jpg`) and update the `src` in `src/components/sections/Hero.tsx`.
-`next/image` will optimise raster formats automatically.
-
 ## Structure
 
 ```
@@ -76,4 +70,4 @@ src/
 - Full keyboard support; visible focus rings; `aria-*` on the mobile menu and form status
 - Respects `prefers-reduced-motion` — Lenis, the custom cursor, and transitions all stand down
 - Custom cursor only mounts for fine pointers on wide viewports
-- Fonts via `next/font` (self-hosted, `display: swap`); hero image uses `next/image` with `priority`
+- Fonts via `next/font` (self-hosted, `display: swap`)

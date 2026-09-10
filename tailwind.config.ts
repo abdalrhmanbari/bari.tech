@@ -45,15 +45,6 @@ const config: Config = {
         smooth: "cubic-bezier(0.16, 0.84, 0.32, 1)",
       },
       keyframes: {
-        // Hero portrait entrance (was @keyframes portraitFrame / portraitImage).
-        "portrait-frame": {
-          "0%": { opacity: "0", transform: "translateY(12px) scale(0.96)" },
-          "100%": { opacity: "1", transform: "translateY(0) scale(1)" },
-        },
-        "portrait-image": {
-          "0%": { opacity: "0", transform: "translateY(12px) scale(0.98)" },
-          "100%": { opacity: "1", transform: "translateY(0) scale(1)" },
-        },
         // Hero scroll indicator drip (was @keyframes scrolldrop).
         "scroll-drop": {
           "0%": { transform: "translateY(-100%)" },
@@ -61,8 +52,6 @@ const config: Config = {
         },
       },
       animation: {
-        "portrait-frame": "portrait-frame 1.2s ease-out both",
-        "portrait-image": "portrait-image 1.2s ease-out both",
         "scroll-drop":
           "scroll-drop 2.2s infinite cubic-bezier(0.16, 0.84, 0.32, 1)",
       },

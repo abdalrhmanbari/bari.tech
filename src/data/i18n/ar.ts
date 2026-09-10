@@ -101,10 +101,7 @@ export const ar: Dictionary = {
         description:
           "منصّة حديثة لخدمات غسيل السيارات مبنية بـ Next.js وووردبريس Headless، تتضمّن نظام حجز مواعيد متعدّد الخطوات، وإدارة ديناميكية للخدمات، وآراء العملاء، وإدارة للمحتوى، ومساعداً ذكياً للعملاء.",
         tech: ["Next.js", "TypeScript", "Tailwind CSS", "Headless WordPress", "Framer Motion"],
-        links: [
-          { label: "قريباً", href: "" },
-          { label: "اطلب دراسة الحالة", href: "#contact" },
-        ],
+        links: [{ label: "قريباً", href: "" }],
         image: "/projects/bombo.png",
         country: "العراق",
       },
@@ -114,10 +111,7 @@ export const ar: Dictionary = {
         description:
           "متجر إلكتروني حديث لمنتجات العناية بالسيارات مبني بـ Next.js وWooCommerce، يتضمّن استكشاف المنتجات، وبحثاً وتصفيةً متقدّمين، ومسار سلّة ودفع، وحسابات للعملاء، وتتبّع الطلبات، ومدفوعات Stripe.",
         tech: ["Next.js", "TypeScript", "WooCommerce", "Stripe", "Tailwind CSS"],
-        links: [
-          { label: "قريباً", href: "" },
-          { label: "اطلب دراسة الحالة", href: "#contact" },
-        ],
+        links: [{ label: "قريباً", href: "" }],
         image: "/projects/nextzett.png",
         country: "العراق",
       },
