@@ -57,7 +57,7 @@ export const en: Dictionary = {
 
   projects: {
     eyebrow: "Selected Work",
-    title: "Projects I’ve built and continue to refine.",
+    title: "Projects I’ve built, from goals to launch.",
     items: projects.map((project) => ({
       title: project.title,
       tag: project.tag,

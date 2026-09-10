@@ -30,9 +30,9 @@ export const ar: Dictionary = {
   hero: {
     kicker: "هندسة البرمجيات · واجهات أمامية · React",
     titleLines: ["عبد الرحمن", "البّري"],
-    roles: ["مطوّر واجهات أمامية", "React و Next.js", "مهندس برمجيات"],
+    roles: ["مطوّر واجهات أمامية", "React و Next.js و TypeScript", "مهندس برمجيات"],
     tagline:
-      "مطوّر واجهات أمامية متخصّص في React و Next.js و TypeScript وبناء تجارب ويب حديثة.",
+      "أبني مواقع سريعة وحديثة تساعد الشركات على الظهور بشكل أفضل، والأداء بشكل أفضل، والنموّ عبر الإنترنت.",
     viewProjects: "عرض المشاريع",
     contactMe: "تواصل معي",
     scroll: "مرّر للأسفل",
@@ -63,12 +63,13 @@ export const ar: Dictionary = {
       {
         index: "01",
         title: "تطوير المواقع",
-        description: "مواقع حديثة ومتجاوبة مصمّمة خصيصاً لأعمالك.",
+        description: "مواقع حديثة ومتجاوبة مبنية حول أهداف عملك.",
       },
       {
         index: "02",
         title: "تطوير المتاجر الإلكترونية",
-        description: "متاجر إلكترونية متكاملة مع تجربة تسوّق ومسار دفع.",
+        description:
+          "متاجر إلكترونية متكاملة تشمل عرض المنتجات والسلّة وإتمام الطلب وتجربة الدفع.",
       },
       {
         index: "03",
@@ -78,19 +79,21 @@ export const ar: Dictionary = {
       {
         index: "04",
         title: "تحسين الأداء وتجربة المستخدم وتحسين محركات البحث",
-        description: "تحسين السرعة وسهولة الاستخدام والظهور في نتائج البحث.",
+        description:
+          "تحسين سرعة الموقع وسهولة استخدامه وأدائه وظهوره في نتائج البحث.",
       },
       {
         index: "05",
         title: "النشر وإعداد الخادم",
-        description: "نشر موقعك وتهيئته على الخادم.",
+        description:
+          "نشر موقعك وتهيئته مع النطاق وشهادة SSL وبيئة الخادم.",
       },
     ],
   },
 
   projects: {
     eyebrow: "أعمال مختارة",
-    title: "مشاريع بنيتُها وأواصل تحسينها.",
+    title: "مشاريع بنيتُها، من الهدف إلى الإطلاق.",
     items: [
       {
         title: "Bombo Car Wash",
@@ -98,7 +101,10 @@ export const ar: Dictionary = {
         description:
           "منصّة حديثة لخدمات غسيل السيارات مبنية بـ Next.js وووردبريس Headless، تتضمّن نظام حجز مواعيد متعدّد الخطوات، وإدارة ديناميكية للخدمات، وآراء العملاء، وإدارة للمحتوى، ومساعداً ذكياً للعملاء.",
         tech: ["Next.js", "TypeScript", "Tailwind CSS", "Headless WordPress", "Framer Motion"],
-        links: [{ label: "قريباً", href: "" }],
+        links: [
+          { label: "قريباً", href: "" },
+          { label: "اطلب دراسة الحالة", href: "#contact" },
+        ],
         image: "/projects/bombo.png",
         country: "العراق",
       },
@@ -108,7 +114,10 @@ export const ar: Dictionary = {
         description:
           "متجر إلكتروني حديث لمنتجات العناية بالسيارات مبني بـ Next.js وWooCommerce، يتضمّن استكشاف المنتجات، وبحثاً وتصفيةً متقدّمين، ومسار سلّة ودفع، وحسابات للعملاء، وتتبّع الطلبات، ومدفوعات Stripe.",
         tech: ["Next.js", "TypeScript", "WooCommerce", "Stripe", "Tailwind CSS"],
-        links: [{ label: "قريباً", href: "" }],
+        links: [
+          { label: "قريباً", href: "" },
+          { label: "اطلب دراسة الحالة", href: "#contact" },
+        ],
         image: "/projects/nextzett.png",
         country: "العراق",
       },
@@ -202,7 +211,7 @@ export const ar: Dictionary = {
       },
       {
         title: "إدارة المحتوى والبيانات",
-        items: ["Headless WordPress", "REST APIs", "WooCommerce"],
+        items: ["Headless WordPress", "WooCommerce", "REST APIs"],
       },
       {
         title: "الأدوات",

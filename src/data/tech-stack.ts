@@ -20,7 +20,7 @@ export const techStack: StackGroup[] = [
   },
   {
     title: "CMS & Data",
-    items: ["Headless WordPress", "REST APIs", "WooCommerce"],
+    items: ["Headless WordPress", "WooCommerce", "REST APIs"],
   },
   {
     title: "Tooling",

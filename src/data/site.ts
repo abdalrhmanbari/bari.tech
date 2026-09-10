@@ -30,9 +30,9 @@ export const site = {
   /** Small eyebrow above the hero headline. */
   kicker: "Software Engineering · Frontend · React",
   /** Role chips shown under the hero headline, separated by dots. */
-  roles: ["Frontend Developer", "React & Next.js", "Software Engineer"],
+  roles: ["Frontend Developer", "React, Next.js & TypeScript", "Software Engineer"],
   tagline:
-    "Frontend Developer specializing in React, Next.js, TypeScript, and modern web experiences.",
+    "I build fast, modern websites that help businesses look better, perform better, and grow online.",
   /** Short logo mark in the header: primary word + dimmed descriptor. */
   logo: { primary: "AL BARI", secondary: "Frontend Developer" },
   /**

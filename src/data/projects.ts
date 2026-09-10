@@ -29,7 +29,10 @@ export const projects: Project[] = [
   description:
     "A modern car wash service platform built with Next.js and Headless WordPress, featuring a multi-step appointment booking system, dynamic service management, testimonials, content management, and an AI-powered customer assistant.",
   tech: ["Next.js", "TypeScript", "Tailwind CSS", "Headless WordPress", "Framer Motion"],
-  links: [{ label: "Coming Soon", href: "" }],
+  links: [
+    { label: "Coming Soon", href: "" },
+    { label: "Request Case Study", href: "#contact" },
+  ],
   image: "/projects/bombo.png",
   country: "Iraq",
 },
@@ -39,7 +42,10 @@ export const projects: Project[] = [
   description:
     "A modern automotive care e-commerce storefront built with Next.js and WooCommerce, featuring product discovery, advanced search and filtering, cart and checkout flows, customer accounts, order tracking, and Stripe payments.",
   tech: ["Next.js", "TypeScript", "WooCommerce", "Stripe", "Tailwind CSS"],
-  links: [{ label: "Coming Soon", href: "" }],
+  links: [
+    { label: "Coming Soon", href: "" },
+    { label: "Request Case Study", href: "#contact" },
+  ],
   image: "/projects/nextzett.png",
   country: "Iraq",
 },
