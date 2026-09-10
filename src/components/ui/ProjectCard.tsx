@@ -102,11 +102,8 @@ export function ProjectCard({
                 <a
                   key={link.label}
                   href={link.href}
-                  // In-page anchors (e.g. a "Request Case Study" CTA pointing at
-                  // #contact) stay in the same tab; only external URLs open a new one.
-                  {...(link.href.startsWith("#")
-                    ? {}
-                    : { target: "_blank", rel: "noreferrer" })}
+                  target="_blank"
+                  rel="noreferrer"
                   className="border-b border-hair pb-[3px] text-[13px] tracking-[0.05em] text-ink-secondary transition-colors duration-300 hover:border-ink-primary hover:text-ink-primary"
                 >
                   {link.label}{" "}
