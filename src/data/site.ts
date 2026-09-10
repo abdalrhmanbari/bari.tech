@@ -1,8 +1,21 @@
 
 
-export const SITE_URL = (
-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://abd-alrhman-al-bari.vercel.app"
-).replace(/\/$/, "");
+const FALLBACK_SITE_URL = "https://abd-alrhman-al-bari.vercel.app";
+
+// Origin used for canonical links, sitemap, robots, and Open Graph metadata.
+// Falls back to the production URL when NEXT_PUBLIC_SITE_URL is unset, blank, or
+// malformed — an invalid `metadataBase` fails the Next.js production build.
+function resolveSiteUrl(): string {
+  const configured = process.env.NEXT_PUBLIC_SITE_URL?.trim();
+  if (!configured) return FALLBACK_SITE_URL;
+  try {
+    return new URL(configured).origin;
+  } catch {
+    return FALLBACK_SITE_URL;
+  }
+}
+
+export const SITE_URL = resolveSiteUrl();
 
 // Where the contact form POSTs. Defaults to the built-in Gmail-SMTP route;
 // set NEXT_PUBLIC_CONTACT_ENDPOINT to an external URL (e.g. Formspree) to override.
