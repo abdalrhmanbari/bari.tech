@@ -6,6 +6,8 @@ export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
 export default function OpengraphImage() {
+  const github = new URL(site.socials.github.url);
+
   return new ImageResponse(
     (
       <div
@@ -76,7 +78,7 @@ export default function OpengraphImage() {
           }}
         >
           <span>React · Next.js · TypeScript · Headless WordPress</span>
-          <span>{new URL(site.socials.github).host}/abdalrhmanbari</span>
+          <span>{`${github.host}${github.pathname}`}</span>
         </div>
       </div>
     ),

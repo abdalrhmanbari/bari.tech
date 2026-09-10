@@ -1,11 +1,19 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Instrument_Serif, Space_Grotesk } from "next/font/google";
+import {
+  Inter,
+  Instrument_Serif,
+  Space_Grotesk,
+  IBM_Plex_Sans_Arabic,
+} from "next/font/google";
 import "./globals.css";
 
 import { site, SITE_URL } from "@/data/site";
+import { LanguageProvider } from "@/components/i18n/LanguageProvider";
+import { LANG_BOOT_SCRIPT } from "@/components/i18n/langBoot";
 import { Overlays } from "@/components/layout/Overlays";
 import { CustomCursor } from "@/components/layout/CustomCursor";
 import { SmoothScroll } from "@/components/layout/SmoothScroll";
+import { SkipLink } from "@/components/layout/SkipLink";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 
@@ -27,6 +35,13 @@ const grotesk = Space_Grotesk({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
   variable: "--font-grotesk",
+  display: "swap",
+});
+
+const arabic = IBM_Plex_Sans_Arabic({
+  subsets: ["arabic"],
+  weight: ["300", "400", "500", "600", "700"],
+  variable: "--font-arabic",
   display: "swap",
 });
 
@@ -75,7 +90,7 @@ const personJsonLd = {
   email: site.email,
   jobTitle: ["Frontend Developer", "Software Engineer"],
   description: site.meta.description,
-  sameAs: [site.socials.github, site.socials.linkedin],
+  sameAs: [site.socials.github.url, site.socials.linkedin.url],
   knowsAbout: [
     "Frontend Development",
     "React",
@@ -101,9 +116,13 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${serif.variable} ${grotesk.variable}`}
+      dir="ltr"
+      suppressHydrationWarning
+      className={`${inter.variable} ${serif.variable} ${grotesk.variable} ${arabic.variable}`}
     >
       <body>
+        {/* Apply a stored language before paint so direction never flashes. */}
+        <script dangerouslySetInnerHTML={{ __html: LANG_BOOT_SCRIPT }} />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
@@ -113,18 +132,18 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
         />
 
-        <a href="#about" className="skip-link">
-          Skip to content
-        </a>
+        <LanguageProvider>
+          <SkipLink />
 
-        <Overlays />
-        <CustomCursor />
+          <Overlays />
+          <CustomCursor />
 
-        <SmoothScroll>
-          <Header />
-          <main>{children}</main>
-          <Footer />
-        </SmoothScroll>
+          <SmoothScroll>
+            <Header />
+            <main>{children}</main>
+            <Footer />
+          </SmoothScroll>
+        </LanguageProvider>
       </body>
     </html>
   );

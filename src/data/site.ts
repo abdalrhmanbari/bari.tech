@@ -4,7 +4,10 @@ export const SITE_URL = (
   process.env.NEXT_PUBLIC_SITE_URL ?? "https://abd-alrhman-al-bari.vercel.app"
 ).replace(/\/$/, "");
 
-export const CONTACT_ENDPOINT = process.env.NEXT_PUBLIC_CONTACT_ENDPOINT ?? "";
+// Where the contact form POSTs. Defaults to the built-in Gmail-SMTP route;
+// set NEXT_PUBLIC_CONTACT_ENDPOINT to an external URL (e.g. Formspree) to override.
+export const CONTACT_ENDPOINT =
+  process.env.NEXT_PUBLIC_CONTACT_ENDPOINT || "/api/contact";
 
 export const site = {
   name: "Abd Alrhman Al Bari",
@@ -19,15 +22,34 @@ export const site = {
     "Frontend Developer specializing in React, Next.js, TypeScript, and modern web experiences.",
   /** Short logo mark in the header: primary word + dimmed descriptor. */
   logo: { primary: "AL BARI", secondary: "Frontend Developer" },
+  /**
+   * Contact details — the single source of truth. Edit an address or URL here
+   * and it flows to the contact list (both languages), the mobile menu, the
+   * footer, the JSON-LD, and the Open Graph image. Each social carries its
+   * `url` plus the `handle` shown as the row's display text.
+   * (The contact form's delivery inbox is configured separately via env —
+   * see `.env.example`.)
+   */
   email: "bariabdalrhman@gmail.com",
   location: "Available worldwide · Remote",
   socials: {
-    github: "https://github.com/abdalrhmanbari",
-    linkedin: "https://www.linkedin.com/in/abd-alrhman-al-bari-b09503260/",
+    github: {
+      url: "https://github.com/abdalrhmanbari",
+      handle: "@abdalrhmanbari",
+    },
+    linkedin: {
+      url: "https://www.linkedin.com/in/abdalrahman-al-bari-b09503260",
+      handle: "in/abd-alrhman-al-bari",
+    },
+    whatsapp: {
+      url: "https://wa.me/963982050174",
+      handle: "+963 982 050 174",
+    },
   },
   /** Header navigation. Order and labels mirror the reference site. */
   nav: [
     { label: "About", href: "#about" },
+    { label: "Services", href: "#services" },
     { label: "Skills", href: "#techstack" },
     { label: "Projects", href: "#projects" },
     { label: "Experience", href: "#experience" },

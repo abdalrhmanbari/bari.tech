@@ -43,6 +43,7 @@ All copy is data-driven — no content is hardcoded inside components:
 | ------------------------- | -------------------------------------------------------------- |
 | `src/data/site.ts`        | Name, role, hero copy, logo, email, socials, nav, SEO strings  |
 | `src/data/about.ts`       | About heading, paragraphs, stat facts                          |
+| `src/data/services.ts`    | Services cards (index, title, description)                      |
 | `src/data/projects.ts`    | Project cards (title, tag, description, tech tags, links)       |
 | `src/data/experience.ts`  | Timeline entries                                               |
 | `src/data/tech-stack.ts`  | Skill groups                                                   |
@@ -62,7 +63,7 @@ src/
   app/            layout, page, metadata routes (sitemap, robots, manifest, OG image, icon)
   components/
     layout/       Header, Footer, SmoothScroll, CustomCursor, Overlays
-    sections/     Hero, About, Projects, Experience, TechStack, Education, Contact
+    sections/     Hero, About, Services, Projects, Experience, TechStack, Education, Contact
     ui/           Eyebrow, Reveal, ProjectCard, ContactForm
   data/           all editable content
   hooks/          useTilt

@@ -1,9 +1,9 @@
 "use client";
 
 import { Fragment } from "react";
-import Image from "next/image";
 import { motion } from "framer-motion";
-import { site } from "@/data/site";
+import { useLanguage } from "@/components/i18n/LanguageProvider";
+import { buttonClass } from "@/components/ui/Button";
 import { EASE_OUT_CUBIC, EASE_OUT_QUART } from "@/lib/motion";
 import { useReducedMotionSafe } from "@/hooks/useReducedMotionSafe";
 
@@ -15,29 +15,47 @@ const groupTransition = (i: number) => ({
 });
 
 export function Hero() {
+  const { dict } = useLanguage();
+  const hero = dict.hero;
   const reduce = useReducedMotionSafe();
-  // `initial={false}` makes Framer render straight at the target — no entrance.
+
   const group = reduce ? false : { opacity: 0, y: 20 };
 
   return (
-    <section id="hero" className="hero">
-      <div className="hero-inner">
-        <div className="hero-kicker">
+    <section
+      id="hero"
+      className="relative z-[5] mx-auto flex min-h-[100svh] max-w-section flex-col items-center justify-center px-12 pb-40 pt-header text-center bp-nav:px-6"
+    >
+      <div
+        className="
+          relative z-[2]
+          flex w-full max-w-[1000px]
+          flex-col items-center
+          text-center
+        "
+      >
+        {/* Kicker */}
+        <div className="mb-8 overflow-hidden text-center font-grotesk text-[13px] uppercase tracking-[0.2em] text-ink-muted">
           <motion.span
-            className="line-inner"
+            className="block"
             initial={reduce ? false : { y: "40%", opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 1, ease: EASE_OUT_CUBIC, delay: 0.2 }}
+            transition={{
+              duration: 1,
+              ease: EASE_OUT_CUBIC,
+              delay: 0.2,
+            }}
           >
-            {site.kicker}
+            {hero.kicker}
           </motion.span>
         </div>
 
-        <h1 className="hero-title">
-          {site.titleLines.map((line, i) => (
-            <span className="line" key={line}>
+        {/* Title */}
+        <h1 className="w-full max-w-[900px] text-center font-grotesk text-[clamp(47px,7.5vw,76px)] font-bold leading-[1.05] tracking-[0.01em] text-ink-primary">
+          {hero.titleLines.map((line, i) => (
+            <span className="block overflow-hidden" key={line}>
               <motion.span
-                className="line-inner"
+                className="block"
                 initial={reduce ? false : { y: "110%" }}
                 animate={{ y: "0%" }}
                 transition={{
@@ -52,66 +70,105 @@ export function Hero() {
           ))}
         </h1>
 
+        {/* Roles */}
         <motion.div
-          className="hero-roles"
+          className="
+            mt-[26px]
+            flex flex-wrap
+            items-center justify-center
+            gap-2.5
+            text-center
+            font-grotesk
+            text-[14px]
+            tracking-[0.05em]
+            text-ink-secondary
+          "
           initial={group}
           animate={{ opacity: 1, y: 0 }}
           transition={groupTransition(0)}
         >
-          {site.roles.map((role, i) => (
+          {hero.roles.map((role, i) => (
             <Fragment key={role}>
-              {i > 0 && <span className="dot">·</span>}
+              {i > 0 && <span className="text-hair">·</span>}
               <span>{role}</span>
             </Fragment>
           ))}
         </motion.div>
 
+        {/* Description */}
         <motion.p
-          className="hero-sub"
+          className="
+            mt-[34px]
+            w-full max-w-[620px]
+            text-center
+            text-[17px]
+            font-light
+            leading-relaxed
+            text-ink-secondary
+          "
           initial={group}
           animate={{ opacity: 1, y: 0 }}
           transition={groupTransition(1)}
         >
-          {site.tagline}
+          {hero.tagline}
         </motion.p>
 
+        {/* Actions */}
         <motion.div
-          className="hero-actions"
+          className="
+            mt-[46px]
+            flex flex-wrap
+            items-center justify-center
+            gap-[18px]
+          "
           initial={group}
           animate={{ opacity: 1, y: 0 }}
           transition={groupTransition(2)}
         >
-          <a href="#projects" className="btn btn-primary">
-            View Projects
+          <a href="#projects" className={buttonClass("primary")}>
+            {hero.viewProjects}
           </a>
 
-          <a href="#contact" className="btn btn-ghost">
-            Contact Me
+          <a href="#contact" className={buttonClass("ghost")}>
+            {hero.contactMe}
           </a>
         </motion.div>
       </div>
 
-      <div className="hero-portrait" aria-hidden="true">
-        <div className="hero-portrait-frame">
-          <Image
-            src="/portrait.svg"
-            alt=""
-            width={600}
-            height={680}
-            priority
-            sizes="(max-width: 980px) 80vw, 49vw"
-          />
-        </div>
-      </div>
-
+      {/* Scroll indicator */}
       <motion.div
-        className="scroll-indicator"
+        className="
+          absolute bottom-11 left-1/2
+          flex -translate-x-1/2
+          flex-col items-center
+          gap-2.5
+          text-[11px]
+          uppercase
+          tracking-[0.18em]
+          text-ink-muted
+        "
         initial={group}
         animate={{ opacity: 1, y: 0 }}
         transition={groupTransition(3)}
       >
-        <span>Scroll</span>
-        <span className="scroll-line" />
+        <span>{hero.scroll}</span>
+
+        <span
+          className="
+            relative
+            h-9 w-px
+            overflow-hidden
+            bg-hair
+            after:absolute
+            after:left-0
+            after:top-0
+            after:h-2/5
+            after:w-full
+            after:animate-scroll-drop
+            after:bg-ink-primary
+            after:content-['']
+          "
+        />
       </motion.div>
     </section>
   );

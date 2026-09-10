@@ -1,35 +1,49 @@
+"use client";
+
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { Reveal } from "@/components/ui/Reveal";
-import { about } from "@/data/about";
+import { Section } from "@/components/ui/Section";
+import { useLanguage } from "@/components/i18n/LanguageProvider";
 
 export function About() {
+  const { dict } = useLanguage();
+  const about = dict.about;
+
   return (
-    <section id="about" className="section">
-      <div className="about-grid">
+    <Section id="about">
+      <div className="grid grid-cols-[0.9fr_1.1fr] items-start gap-20 bp-md:grid-cols-1 bp-md:gap-10">
         <div>
-          <Eyebrow>About</Eyebrow>
+          <Eyebrow>{about.eyebrow}</Eyebrow>
           <Reveal>
-            <h2 className="about-heading">{about.heading}</h2>
+            <h2 className="text-[clamp(34px,4.5vw,54px)] leading-[1.15]">
+              {about.heading}
+            </h2>
           </Reveal>
         </div>
 
-        <div className="about-text">
+        <div>
           {about.paragraphs.map((paragraph, i) => (
             <Reveal key={i} delay={i * 0.04}>
-              <p>{paragraph}</p>
+              <p className="mb-5 max-w-[560px] text-[16px] text-ink-secondary">
+                {paragraph}
+              </p>
             </Reveal>
           ))}
 
-          <div className="about-facts">
+          <div className="mt-11 grid grid-cols-2 gap-x-10 gap-y-7">
             {about.facts.map((fact) => (
               <Reveal key={fact.label}>
-                <div className="fact-num num">{fact.value}</div>
-                <div className="fact-label">{fact.label}</div>
+                <div className="font-grotesk text-[34px] text-ink-primary">
+                  {fact.value}
+                </div>
+                <div className="mt-1.5 text-[12px] uppercase tracking-[0.1em] text-ink-muted">
+                  {fact.label}
+                </div>
               </Reveal>
             ))}
           </div>
         </div>
       </div>
-    </section>
+    </Section>
   );
 }

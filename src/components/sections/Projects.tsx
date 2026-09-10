@@ -1,23 +1,28 @@
+"use client";
+
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { Reveal } from "@/components/ui/Reveal";
+import { Section } from "@/components/ui/Section";
 import { ProjectCard } from "@/components/ui/ProjectCard";
-import { projects } from "@/data/projects";
+import { useLanguage } from "@/components/i18n/LanguageProvider";
 
 export function Projects() {
+  const { dict } = useLanguage();
+
   return (
-    <section id="projects" className="section">
-      <Eyebrow>Selected Work</Eyebrow>
+    <Section id="projects">
+      <Eyebrow>{dict.projects.eyebrow}</Eyebrow>
       <Reveal>
-        <h2 className="section-title">
-          Projects I&apos;ve built and continue to refine.
+        <h2 className="max-w-[640px] text-[clamp(34px,4.5vw,54px)]">
+          {dict.projects.title}
         </h2>
       </Reveal>
 
       <div className="mt-10 flex flex-col gap-[26px]">
-        {projects.map((project, i) => (
+        {dict.projects.items.map((project, i) => (
           <ProjectCard key={project.title} project={project} index={i} />
         ))}
       </div>
-    </section>
+    </Section>
   );
 }

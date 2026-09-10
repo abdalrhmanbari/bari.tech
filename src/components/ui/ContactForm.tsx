@@ -1,16 +1,22 @@
 "use client";
 
 import { useState } from "react";
-import { site, CONTACT_ENDPOINT } from "@/data/site";
+import { CONTACT_ENDPOINT } from "@/data/site";
+import { useLanguage } from "@/components/i18n/LanguageProvider";
+import { buttonClass } from "@/components/ui/Button";
+import { cn } from "@/lib/cn";
 
-type Status = "idle" | "submitting" | "success" | "error";
+type Status = "idle" | "submitting" | "success" | "invalid" | "error";
 
-const MESSAGES: Record<Exclude<Status, "idle" | "submitting">, string> = {
-  success: "Thanks — your message is on its way.",
-  error: "Please fill in every field with a valid email address.",
-};
+const fieldClass = "mb-[22px]";
+const labelClass =
+  "mb-2.5 block text-[12px] uppercase tracking-[0.1em] text-ink-muted";
+const inputClass =
+  "w-full rounded-[10px] border border-hair bg-surface px-4 py-3.5 text-[14px] text-ink-primary transition-colors duration-300 placeholder:text-ink-muted focus:border-accent-dim focus:outline-none";
 
 export function ContactForm() {
+  const { dict } = useLanguage();
+  const t = dict.contact.form;
   const [status, setStatus] = useState<Status>("idle");
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -20,80 +26,107 @@ export function ContactForm() {
     const name = String(data.get("name") ?? "").trim();
     const email = String(data.get("email") ?? "").trim();
     const message = String(data.get("message") ?? "").trim();
+    const company = String(data.get("company") ?? "").trim(); // honeypot
 
     const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
     if (!name || !message || !emailOk) {
+      setStatus("invalid");
+      return;
+    }
+
+    try {
+      setStatus("submitting");
+      const res = await fetch(CONTACT_ENDPOINT, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ name, email, message, company }),
+      });
+      if (!res.ok) throw new Error("Request failed");
+      form.reset();
+      setStatus("success");
+    } catch {
       setStatus("error");
-      return;
     }
-
-    if (CONTACT_ENDPOINT) {
-      try {
-        setStatus("submitting");
-        const res = await fetch(CONTACT_ENDPOINT, {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ name, email, message }),
-        });
-        if (!res.ok) throw new Error("Request failed");
-        form.reset();
-        setStatus("success");
-      } catch {
-        setStatus("error");
-      }
-      return;
-    }
-
-    // No endpoint configured — hand the draft to the visitor's mail client.
-    const subject = encodeURIComponent(`Portfolio enquiry from ${name}`);
-    const body = encodeURIComponent(`${message}\n\n— ${name}\n${email}`);
-    window.location.href = `mailto:${site.email}?subject=${subject}&body=${body}`;
-    setStatus("success");
   }
 
   return (
     <form onSubmit={handleSubmit} noValidate>
-      <div className="form-field">
-        <label htmlFor="cf-name">Your Name</label>
-        <input id="cf-name" name="name" type="text" autoComplete="name" required />
+      <div className={fieldClass}>
+        <label htmlFor="cf-name" className={labelClass}>
+          {t.name}
+        </label>
+        <input
+          id="cf-name"
+          name="name"
+          type="text"
+          autoComplete="name"
+          required
+          className={inputClass}
+        />
       </div>
 
-      <div className="form-field">
-        <label htmlFor="cf-email">Email Address</label>
+      <div className={fieldClass}>
+        <label htmlFor="cf-email" className={labelClass}>
+          {t.email}
+        </label>
         <input
           id="cf-email"
           name="email"
           type="email"
           autoComplete="email"
           required
+          className={inputClass}
         />
       </div>
 
-      <div className="form-field">
-        <label htmlFor="cf-message">Project Details</label>
+      <div className={fieldClass}>
+        <label htmlFor="cf-message" className={labelClass}>
+          {t.message}
+        </label>
         <textarea
           id="cf-message"
           name="message"
           rows={6}
-          placeholder="Tell me about your project..."
+          placeholder={t.messagePlaceholder}
           required
+          className={cn(inputClass, "min-h-[110px] resize-y")}
+        />
+      </div>
+
+      {/* Honeypot: kept off-screen, ignored by humans, filled by bots. */}
+      <div
+        aria-hidden="true"
+        className="absolute -left-[9999px] top-auto h-0 w-0 overflow-hidden"
+      >
+        <label htmlFor="cf-company">Company</label>
+        <input
+          id="cf-company"
+          name="company"
+          type="text"
+          tabIndex={-1}
+          autoComplete="off"
         />
       </div>
 
       <button
         type="submit"
-        className="btn btn-primary"
+        className={buttonClass("primary")}
         disabled={status === "submitting"}
       >
-        {status === "submitting" ? "Sending…" : "Send Message"}
+        {status === "submitting" ? t.sending : t.send}
       </button>
 
-      <p className="contact-status" role="status" aria-live="polite">
-        {status === "success" && MESSAGES.success}
-        {status === "error" && MESSAGES.error}
+      <p
+        className="mt-[18px] text-[13px] tracking-[0.02em] text-ink-secondary"
+        role="status"
+        aria-live="polite"
+      >
+        {status === "success" && t.success}
+        {status === "invalid" && t.error}
+        {status === "error" && t.networkError}
       </p>
     </form>
   );
