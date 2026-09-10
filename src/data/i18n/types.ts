@@ -23,14 +23,15 @@ export type ProjectEntry = {
 };
 
 export type ServiceEntry = { index: string; title: string; description: string };
-export type ExperienceEntry = { date: string; role: string; description: string };
-export type StackGroup = { title: string; items: string[] };
-export type EducationEntry = {
-  index: string;
-  title: string;
-  org: string;
-  meta: string;
+export type ExperienceEntry = {
+  date: string;
+  role: string;
+  /** Optional secondary line (e.g. institution) shown between the role and description. */
+  org?: string;
+  description: string;
 };
+export type StackGroup = { title: string; items: string[] };
+export type FaqEntry = { index: string; question: string; answer: string };
 export type ContactLink = {
   label: string;
   href: string;
@@ -97,10 +98,10 @@ export type Dictionary = {
     groups: StackGroup[];
   };
 
-  education: {
+  faq: {
     eyebrow: string;
     title: string;
-    items: EducationEntry[];
+    items: FaqEntry[];
   };
 
   contact: {

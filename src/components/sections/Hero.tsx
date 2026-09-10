@@ -120,16 +120,23 @@ export function Hero() {
             flex flex-wrap
             items-center justify-center
             gap-[18px]
+            bp-2xs:w-full bp-2xs:max-w-[320px] bp-2xs:flex-col
           "
           initial={group}
           animate={{ opacity: 1, y: 0 }}
           transition={groupTransition(2)}
         >
-          <a href="#projects" className={buttonClass("primary")}>
+          <a
+            href="#projects"
+            className={buttonClass("primary", "bp-2xs:w-full bp-2xs:justify-center")}
+          >
             {hero.viewProjects}
           </a>
 
-          <a href="#contact" className={buttonClass("ghost")}>
+          <a
+            href="#contact"
+            className={buttonClass("ghost", "bp-2xs:w-full bp-2xs:justify-center")}
+          >
             {hero.contactMe}
           </a>
         </motion.div>
@@ -138,8 +145,8 @@ export function Hero() {
       {/* Scroll indicator */}
       <motion.div
         className="
-          absolute bottom-11 left-1/2
-          flex -translate-x-1/2
+          absolute inset-x-0 bottom-11
+          flex
           flex-col items-center
           gap-2.5
           text-[11px]

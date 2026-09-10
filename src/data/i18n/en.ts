@@ -4,7 +4,7 @@ import { services } from "@/data/services";
 import { projects } from "@/data/projects";
 import { experience } from "@/data/experience";
 import { techStack } from "@/data/tech-stack";
-import { education } from "@/data/education";
+import { faq } from "@/data/faq";
 import { contact } from "@/data/contact";
 import type { Dictionary } from "./types";
 
@@ -70,11 +70,12 @@ export const en: Dictionary = {
   },
 
   experience: {
-    eyebrow: "Experience",
-    title: "A path shaped by building.",
+    eyebrow: "Experience & Education",
+    title: "A path shaped by building and learning.",
     items: experience.map((item) => ({
       date: item.date,
       role: item.role,
+      org: item.org,
       description: item.description,
     })),
   },
@@ -88,14 +89,13 @@ export const en: Dictionary = {
     })),
   },
 
-  education: {
-    eyebrow: "Education",
-    title: "Building knowledge through study.",
-    items: education.map((item) => ({
+  faq: {
+    eyebrow: "FAQ",
+    title: "Answers before you ask.",
+    items: faq.map((item) => ({
       index: item.index,
-      title: item.title,
-      org: item.org,
-      meta: item.meta,
+      question: item.question,
+      answer: item.answer,
     })),
   },
 

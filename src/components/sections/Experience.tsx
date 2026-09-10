@@ -27,6 +27,9 @@ export function Experience() {
               {item.date}
             </div>
             <h3 className="mb-2 text-[22px]">{item.role}</h3>
+            {item.org ? (
+              <p className="mb-2 text-[13px] text-ink-muted">{item.org}</p>
+            ) : null}
             <p className="max-w-[560px] text-[15px] text-ink-secondary">
               {item.description}
             </p>

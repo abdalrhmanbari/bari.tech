@@ -8,6 +8,7 @@ import {
 import "./globals.css";
 
 import { site, SITE_URL } from "@/data/site";
+import { faq } from "@/data/faq";
 import { LanguageProvider } from "@/components/i18n/LanguageProvider";
 import { LANG_BOOT_SCRIPT } from "@/components/i18n/langBoot";
 import { Overlays } from "@/components/layout/Overlays";
@@ -109,6 +110,16 @@ const websiteJsonLd = {
   url: SITE_URL,
 };
 
+const faqJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faq.map((item) => ({
+    "@type": "Question",
+    name: item.question,
+    acceptedAnswer: { "@type": "Answer", text: item.answer },
+  })),
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
@@ -129,6 +140,10 @@ export default function RootLayout({
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
         />
 
         <LanguageProvider>

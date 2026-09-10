@@ -66,6 +66,7 @@ export const site = {
     { label: "Skills", href: "#techstack" },
     { label: "Projects", href: "#projects" },
     { label: "Experience", href: "#experience" },
+    { label: "FAQ", href: "#faq" },
     { label: "Contact", href: "#contact" },
   ],
   meta: {
