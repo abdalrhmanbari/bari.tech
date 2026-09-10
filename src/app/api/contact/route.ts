@@ -71,6 +71,11 @@ export async function POST(request: Request) {
   const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: { user, pass },
+    // Fail fast when the SMTP connection is blocked or slow (common on
+    // serverless hosts) instead of hanging until the function is killed.
+    connectionTimeout: 10_000,
+    greetingTimeout: 10_000,
+    socketTimeout: 20_000,
   });
 
   try {
@@ -87,9 +92,13 @@ export async function POST(request: Request) {
         `<a href="mailto:${escapeHtml(email)}">${escapeHtml(email)}</a></p>`,
     });
   } catch (err) {
-    console.error("Contact form: sendMail failed.", err);
+    const code =
+      err && typeof err === "object" && "code" in err
+        ? String((err as { code?: unknown }).code)
+        : "UNKNOWN";
+    console.error(`Contact form: sendMail failed (${code}).`, err);
     return NextResponse.json(
-      { error: "Could not send the message. Please email me directly." },
+      { error: "Could not send the message. Please email me directly.", code },
       { status: 502 },
     );
   }

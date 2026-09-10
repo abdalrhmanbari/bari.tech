@@ -44,10 +44,16 @@ export function ContactForm() {
         },
         body: JSON.stringify({ name, email, message, company }),
       });
-      if (!res.ok) throw new Error("Request failed");
+      if (!res.ok) {
+        const detail = await res.json().catch(() => null);
+        console.error("Contact form failed:", res.status, detail);
+        setStatus(res.status === 422 ? "invalid" : "error");
+        return;
+      }
       form.reset();
       setStatus("success");
-    } catch {
+    } catch (err) {
+      console.error("Contact form network error:", err);
       setStatus("error");
     }
   }
