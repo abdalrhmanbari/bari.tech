@@ -30,7 +30,7 @@ export function About() {
             </Reveal>
           ))}
 
-          <div className="mt-11 grid grid-cols-2 gap-x-10 gap-y-7">
+          <div className="mt-11 grid grid-cols-2 gap-x-10 gap-y-7 bp-xs:gap-x-6 bp-xs:gap-y-4">
             {about.facts.map((fact) => (
               <Reveal key={fact.label}>
                 <div className="font-grotesk text-[34px] text-ink-primary">

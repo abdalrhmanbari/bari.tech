@@ -53,7 +53,7 @@ export function Header() {
         aria-label={dict.homeAria}
       >
         {dict.logo.primary}{" "}
-        <span className="opacity-50">{dict.logo.secondary}</span>
+        <span className="opacity-50 bp-nav:text-[12px]">{dict.logo.secondary}</span>
       </a>
 
       <nav className="bp-nav:hidden" aria-label={dict.navAria}>

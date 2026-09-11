@@ -40,7 +40,7 @@ export function Faq() {
                   className="mt-1 shrink-0 text-ink-muted transition-transform duration-300 ease-smooth group-open:rotate-45"
                 />
               </summary>
-              <p className="pb-7 text-[14px] leading-relaxed text-ink-secondary">
+              <p className="pb-7 text-[15px] leading-relaxed text-ink-secondary bp-md:text-[14px]">
                 {item.answer}
               </p>
             </details>

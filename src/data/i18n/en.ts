@@ -18,7 +18,7 @@ export const en: Dictionary = {
   name: site.name,
   dir: "ltr",
   switchLabel: "العربية",
-  switchGlyph: "ع",
+  switchGlyph: "عربي",
   switchAria: "Switch to Arabic",
 
   nav: site.nav.map((item) => ({ label: item.label, href: item.href })),
