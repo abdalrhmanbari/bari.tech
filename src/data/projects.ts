@@ -84,10 +84,10 @@ export const projects: Project[] = [
     country: "Italy",
   },
   {
-    title: "Terra Group UAE",
+    title: "Terra Group",
     tag: "Corporate / React.js",
     description:
-      "A corporate website for a UAE engineering and design consultancy, built with React and TypeScript with responsive layouts and reusable UI components.",
+      "A corporate website for an engineering and design consultancy, built with React and TypeScript with responsive layouts and reusable UI components.",
     tech: ["React", "TypeScript", "Tailwind CSS"],
     links: [{ label: "View Project", href: "https://beta.terragroup.ae/" }],
     image: "/projects/terra.png",

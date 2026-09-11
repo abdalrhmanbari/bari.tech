@@ -56,7 +56,7 @@ export function Header() {
         <span className="opacity-50">{dict.logo.secondary}</span>
       </a>
 
-      <nav className="bp-nav:hidden" aria-label="Primary">
+      <nav className="bp-nav:hidden" aria-label={dict.navAria}>
         <ul className="flex list-none items-center gap-10">
           {dict.nav.map((item) => (
             <li key={item.href}>

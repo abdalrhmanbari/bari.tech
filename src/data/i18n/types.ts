@@ -54,6 +54,7 @@ export type Dictionary = {
   logo: { primary: string; secondary: string };
   skipToContent: string;
   homeAria: string;
+  navAria: string;
   menuOpen: string;
   menuClose: string;
 

@@ -25,6 +25,7 @@ export const en: Dictionary = {
   logo: { primary: site.logo.primary, secondary: site.logo.secondary },
   skipToContent: "Skip to content",
   homeAria: `${site.name} — home`,
+  navAria: "Primary",
   menuOpen: "Open menu",
   menuClose: "Close menu",
 
