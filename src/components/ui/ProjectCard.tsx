@@ -69,10 +69,10 @@ export function ProjectCard({
           <span>{project.tag}</span>
           {project.country && (
             <>
-              <span aria-hidden="true" className="text-hair">
+              <span aria-hidden="true" className="text-hair bp-sm:hidden">
                 ·
               </span>
-              <span className="inline-flex items-center gap-1 text-ink-secondary">
+              <span className="inline-flex items-center gap-1 text-ink-secondary bp-sm:w-full">
                 <MapPin className="size-3 shrink-0" aria-hidden="true" />
                 {project.country}
               </span>
