@@ -47,7 +47,7 @@ export const projects: Project[] = [
     title: "DigitStone",
     tag: "Corporate / Next.js",
     description:
-      "A digital agency website built with Next.js and Headless WordPress, featuring dynamic services, case studies, blog content, multilingual support, and an AI-powered website assistant.",
+      "A digital agency website built with Next.js and Headless WordPress, featuring dynamic services, case studies, a multilingual blog, an appointment booking system, and an AI-powered website assistant.",
     tech: ["Next.js", "TypeScript", "Tailwind CSS", "Headless WordPress"],
     links: [{ label: "View Project", href: "https://digitstone.tech/" }],
     image: "/projects/digitstone.png",

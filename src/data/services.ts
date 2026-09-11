@@ -30,6 +30,12 @@ export const services: ServiceItem[] = [
   },
   {
     index: "05",
+    title: "Dashboard & Content Management Systems",
+    description:
+      "Custom admin dashboards for managing site content and data with ease, no code changes required.",
+  },
+  {
+    index: "06",
     title: "Deployment & Server Setup",
     description:
       "Deploy and configure your website, domain, SSL, and server environment.",

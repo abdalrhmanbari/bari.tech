@@ -86,6 +86,12 @@ export const ar: Dictionary = {
       },
       {
         index: "05",
+        title: "تطوير لوحات التحكم وإدارة المحتوى",
+        description:
+          "لوحات تحكم مخصّصة لإدارة محتوى الموقع والبيانات بسهولة دون الحاجة للتعديل على الكود.",
+      },
+      {
+        index: "06",
         title: "النشر وإعداد الخادم",
         description:
           "نشر موقعك وتهيئته مع النطاق وشهادة SSL وبيئة الخادم.",
@@ -121,7 +127,7 @@ export const ar: Dictionary = {
         title: "DigitStone",
         tag: "مواقع شركات / Next.js",
         description:
-          "موقع لوكالة رقمية مبني بـ Next.js وووردبريس Headless، يتضمّن خدمات ديناميكية، ودراسات حالة، ومحتوى مدوّنة، ودعماً متعدّد اللغات، ومساعداً ذكياً للموقع.",
+          "موقع لوكالة رقمية مبني بـ Next.js وWordPress Headless، يتضمّن خدمات ديناميكية، ودراسات حالة، ومدوّنة متعدّدة اللغات، ونظام حجز مواعيد، ومساعداً ذكياً للموقع.",
         tech: ["Next.js", "TypeScript", "Tailwind CSS", "Headless WordPress"],
         links: [{ label: "زيارة المشروع", href: "https://digitstone.tech/" }],
         image: "/projects/digitstone.png",
