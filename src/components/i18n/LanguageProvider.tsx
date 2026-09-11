@@ -7,7 +7,6 @@ import {
   useEffect,
   useState,
 } from "react";
-import { dictionaries } from "@/data/i18n";
 import type { Dictionary, Lang } from "@/data/i18n/types";
 import { LANG_STORAGE_KEY } from "./langBoot";
 
@@ -24,7 +23,14 @@ function isLang(value: unknown): value is Lang {
   return value === "en" || value === "ar";
 }
 
-export function LanguageProvider({ children }: { children: React.ReactNode }) {
+export function LanguageProvider({
+  children,
+  dictionaries,
+}: {
+  children: React.ReactNode;
+  /** Current dictionaries — includes any content saved through /admin. */
+  dictionaries: Record<Lang, Dictionary>;
+}) {
   // Start on English so the server render and the first client render agree.
   // A stored preference is adopted right after mount (the boot script has
   // already fixed <html dir> to avoid a layout flash).

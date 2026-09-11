@@ -5,10 +5,10 @@ import {
   Space_Grotesk,
   IBM_Plex_Sans_Arabic,
 } from "next/font/google";
-import "./globals.css";
+import "../globals.css";
 
 import { site, SITE_URL } from "@/data/site";
-import { faq } from "@/data/faq";
+import { getMergedDictionaries } from "@/lib/content/merge";
 import { LanguageProvider } from "@/components/i18n/LanguageProvider";
 import { LANG_BOOT_SCRIPT } from "@/components/i18n/langBoot";
 import { Overlays } from "@/components/layout/Overlays";
@@ -82,6 +82,11 @@ export const viewport: Viewport = {
   colorScheme: "dark",
 };
 
+// Content can be edited live via /admin (stored in Netlify Blobs), so every
+// page under this layout must be rendered per-request rather than cached
+// as a static build artifact.
+export const dynamic = "force-dynamic";
+
 const personJsonLd = {
   "@context": "https://schema.org",
   "@type": "Person",
@@ -110,19 +115,21 @@ const websiteJsonLd = {
   url: SITE_URL,
 };
 
-const faqJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  mainEntity: faq.map((item) => ({
-    "@type": "Question",
-    name: item.question,
-    acceptedAnswer: { "@type": "Answer", text: item.answer },
-  })),
-};
-
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  const dictionaries = await getMergedDictionaries();
+
+  const faqJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: dictionaries.en.faq.items.map((item) => ({
+      "@type": "Question",
+      name: item.question,
+      acceptedAnswer: { "@type": "Answer", text: item.answer },
+    })),
+  };
+
   return (
     <html
       lang="en"
@@ -146,7 +153,7 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
         />
 
-        <LanguageProvider>
+        <LanguageProvider dictionaries={dictionaries}>
           <SkipLink />
 
           <Overlays />
