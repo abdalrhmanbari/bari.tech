@@ -11,6 +11,12 @@ export default function AdminOverviewPage() {
         the site immediately after saving.
       </p>
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+        <Link
+          href="/admin/messages"
+          className="rounded-lg border border-white/10 bg-card p-4 text-sm text-ink-primary transition hover:border-white/20"
+        >
+          Messages
+        </Link>
         {SECTION_KEYS.map((key) => (
           <Link
             key={key}

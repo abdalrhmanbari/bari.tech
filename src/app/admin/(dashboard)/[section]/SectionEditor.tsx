@@ -8,6 +8,7 @@ import {
   type Row,
   type RepeaterBlock,
 } from "@/lib/admin/section-config";
+import { Skeleton } from "@/components/ui/Skeleton";
 
 type Fields = Record<string, string | string[]>;
 
@@ -151,7 +152,37 @@ export function SectionEditor({ section }: { section: SectionKey }) {
       </div>
 
       {loading ? (
-        <p className="text-sm text-ink-secondary">Loading…</p>
+        <div className="space-y-6">
+          {config.blocks.map((block, i) => (
+            <div key={i}>
+              <Skeleton className="mb-2 h-3 w-32" />
+              {block.kind === "repeater" ? (
+                <div className="space-y-3">
+                  {Array.from({ length: 2 }).map((_, idx) => (
+                    <div key={idx} className="rounded-lg border border-white/10 bg-card p-3">
+                      <Skeleton className="mb-3 h-3 w-20" />
+                      <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                        {block.fields.map((field) => (
+                          <Skeleton
+                            key={field.key}
+                            className={`h-9 ${field.type === "textarea" ? "sm:col-span-2 h-20" : ""}`}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : block.kind === "list" ? (
+                <div className="space-y-2">
+                  <Skeleton className={block.area ? "h-16 w-full" : "h-9 w-full"} />
+                  <Skeleton className={block.area ? "h-16 w-full" : "h-9 w-full"} />
+                </div>
+              ) : (
+                <Skeleton className={block.area ? "h-20 w-full" : "h-9 w-full"} />
+              )}
+            </div>
+          ))}
+        </div>
       ) : (
         <div className="space-y-6">
           {config.blocks.map((block) => {
