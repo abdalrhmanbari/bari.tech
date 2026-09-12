@@ -9,6 +9,7 @@ import {
   type RepeaterBlock,
 } from "@/lib/admin/section-config";
 import { Skeleton } from "@/components/ui/Skeleton";
+import { ImageDropField } from "./ImageDropField";
 
 type Fields = Record<string, string | string[]>;
 
@@ -165,7 +166,11 @@ export function SectionEditor({ section }: { section: SectionKey }) {
                         {block.fields.map((field) => (
                           <Skeleton
                             key={field.key}
-                            className={`h-9 ${field.type === "textarea" ? "sm:col-span-2 h-20" : ""}`}
+                            className={`h-9 ${
+                              field.type === "textarea" || field.type === "image"
+                                ? "sm:col-span-2 h-20"
+                                : ""
+                            }`}
                           />
                         ))}
                       </div>
@@ -291,12 +296,21 @@ export function SectionEditor({ section }: { section: SectionKey }) {
                         {block.fields.map((field) => (
                           <div
                             key={field.key}
-                            className={field.type === "textarea" ? "sm:col-span-2" : ""}
+                            className={
+                              field.type === "textarea" || field.type === "image"
+                                ? "sm:col-span-2"
+                                : ""
+                            }
                           >
                             <label className="mb-1 block text-xs text-ink-secondary">
                               {field.label}
                             </label>
-                            {field.type === "textarea" ? (
+                            {field.type === "image" ? (
+                              <ImageDropField
+                                value={(row[field.key] as string) ?? ""}
+                                onChange={(url) => updateRow(idx, field.key, url)}
+                              />
+                            ) : field.type === "textarea" ? (
                               <textarea
                                 rows={3}
                                 value={(row[field.key] as string) ?? ""}

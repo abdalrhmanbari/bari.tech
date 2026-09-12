@@ -3,7 +3,7 @@ import type { SectionKey } from "@/lib/content/schema";
 export type RowField = {
   key: string;
   label: string;
-  type: "text" | "textarea" | "checkbox";
+  type: "text" | "textarea" | "checkbox" | "image";
 };
 
 export type Row = Record<string, string | boolean>;
@@ -100,7 +100,7 @@ export const SECTION_CONFIGS: Record<SectionKey, SectionConfig> = {
           { key: "tech", label: "Tech (comma-separated)", type: "text" },
           { key: "linkLabel", label: "Link label", type: "text" },
           { key: "linkHref", label: "Link URL", type: "text" },
-          { key: "image", label: "Image path (under /public)", type: "text" },
+          { key: "image", label: "Image", type: "image" },
           { key: "country", label: "Country", type: "text" },
         ],
         emptyRow: {
