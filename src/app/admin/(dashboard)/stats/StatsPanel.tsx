@@ -59,7 +59,7 @@ export function StatsPanel() {
         <div>
           <h1 className="text-xl font-medium text-ink-primary">Stats</h1>
           <p className="mt-1 text-sm text-ink-secondary">
-            Visit counts tracked from the live site, one per browser session.
+            Visit counts tracked from the live site, one per browser tab.
           </p>
         </div>
         <button

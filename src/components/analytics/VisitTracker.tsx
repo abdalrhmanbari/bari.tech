@@ -4,7 +4,7 @@ import { useEffect } from "react";
 
 const SESSION_KEY = "visit-tracked";
 
-/** Fires one visit ping per browser tab session. Renders nothing. */
+/** Fires one visit ping per browser tab (sessionStorage is per-tab, not per-window/browser). Renders nothing. */
 export function VisitTracker() {
   useEffect(() => {
     let alreadyTracked = false;
