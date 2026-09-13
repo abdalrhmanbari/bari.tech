@@ -27,14 +27,34 @@ export function Header() {
   }, []);
 
   // Lock body scroll + close on Escape while the mobile menu is open.
+  // Plain `overflow: hidden` on body doesn't stop touch-scrolling on iOS
+  // Safari, so we also pin the body in place and restore the scroll
+  // position on close.
   useEffect(() => {
     if (!menuOpen) return;
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
+    const scrollY = window.scrollY;
+    const body = document.body;
+    const prev = {
+      position: body.style.position,
+      top: body.style.top,
+      left: body.style.left,
+      right: body.style.right,
+      overflow: body.style.overflow,
+    };
+    body.style.position = "fixed";
+    body.style.top = `-${scrollY}px`;
+    body.style.left = "0";
+    body.style.right = "0";
+    body.style.overflow = "hidden";
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && setMenuOpen(false);
     window.addEventListener("keydown", onKey);
     return () => {
-      document.body.style.overflow = prev;
+      body.style.position = prev.position;
+      body.style.top = prev.top;
+      body.style.left = prev.left;
+      body.style.right = prev.right;
+      body.style.overflow = prev.overflow;
+      window.scrollTo(0, scrollY);
       window.removeEventListener("keydown", onKey);
     };
   }, [menuOpen]);
