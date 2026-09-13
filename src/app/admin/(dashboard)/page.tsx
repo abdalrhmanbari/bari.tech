@@ -17,6 +17,12 @@ export default function AdminOverviewPage() {
         >
           Messages
         </Link>
+        <Link
+          href="/admin/stats"
+          className="rounded-lg border border-white/10 bg-card p-4 text-sm text-ink-primary transition hover:border-white/20"
+        >
+          Stats
+        </Link>
         {SECTION_KEYS.map((key) => (
           <Link
             key={key}

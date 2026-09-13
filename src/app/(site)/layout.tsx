@@ -13,6 +13,7 @@ import { LanguageProvider } from "@/components/i18n/LanguageProvider";
 import { LANG_BOOT_SCRIPT } from "@/components/i18n/langBoot";
 import { Overlays } from "@/components/layout/Overlays";
 import { CustomCursor } from "@/components/layout/CustomCursor";
+import { VisitTracker } from "@/components/analytics/VisitTracker";
 import { SmoothScroll } from "@/components/layout/SmoothScroll";
 import { SkipLink } from "@/components/layout/SkipLink";
 import { Header } from "@/components/layout/Header";
@@ -156,6 +157,7 @@ export default async function RootLayout({
         <LanguageProvider dictionaries={dictionaries}>
           <SkipLink />
 
+          <VisitTracker />
           <Overlays />
           <CustomCursor />
 

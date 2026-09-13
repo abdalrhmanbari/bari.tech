@@ -27,6 +27,12 @@ export default function DashboardLayout({
           >
             Messages
           </Link>
+          <Link
+            href="/admin/stats"
+            className="rounded-md px-3 py-1.5 text-sm text-ink-secondary hover:bg-white/5 hover:text-ink-primary"
+          >
+            Stats
+          </Link>
           {SECTION_KEYS.map((key) => (
             <Link
               key={key}
