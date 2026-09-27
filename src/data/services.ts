@@ -7,37 +7,20 @@ export type ServiceItem = {
 export const services: ServiceItem[] = [
   {
     index: "01",
-    title: "Website Development",
-    description: "Modern, responsive websites built around your business goals.",
+    title: "End-to-End Web Development",
+    description:
+      "From idea to launch: UI design, a fast Next.js front-end, a Headless WordPress CMS you can manage yourself, and deployment with your domain and SSL. Corporate websites, booking platforms, and content-driven sites.",
   },
   {
     index: "02",
     title: "E-commerce Development",
     description:
-      "Complete online stores with product, cart, checkout, and payment experiences.",
+      "Complete online stores built with Next.js and Headless WooCommerce: product catalog, search and filters, cart, checkout, customer accounts, order tracking, and payment integrations like Stripe.",
   },
   {
     index: "03",
-    title: "WordPress Development",
+    title: "Custom Dashboards & Integrations",
     description:
-      "Custom WordPress and WooCommerce websites tailored to your needs.",
-  },
-  {
-    index: "04",
-    title: "Performance, UX & SEO Optimization",
-    description:
-      "Improve website speed, usability, performance, and search visibility.",
-  },
-  {
-    index: "05",
-    title: "Dashboard & Content Management Systems",
-    description:
-      "Custom admin dashboards for managing site content and data with ease, no code changes required.",
-  },
-  {
-    index: "06",
-    title: "Deployment & Server Setup",
-    description:
-      "Deploy and configure your website, domain, SSL, and server environment.",
+      "Custom admin dashboards to manage your content, bookings, and data without touching code, plus integrations with payments, booking systems, email, and AI assistants.",
   },
 ];

@@ -18,7 +18,7 @@ export function Services() {
         </h2>
       </Reveal>
 
-      <div className="mt-10 grid grid-cols-2 gap-5 bp-md:grid-cols-1">
+      <div className="mt-10 grid grid-cols-3 gap-5 bp-lg:grid-cols-1">
         {services.items.map((item) => (
           <Reveal
             data-cursor-grow
