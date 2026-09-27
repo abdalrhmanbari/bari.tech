@@ -412,7 +412,7 @@ export function SectionEditor({ section }: { section: SectionKey }) {
             );
           })}
 
-          <div className="fixed bottom-6 right-6 z-40 flex max-w-[calc(100vw-3rem)] items-center gap-3 rounded-lg border border-white/10 bg-card/95 py-2 pl-4 pr-2 shadow-lg backdrop-blur">
+          <div className="fixed bottom-16 right-6 z-40 flex max-w-[calc(100vw-3rem)] items-center gap-3 rounded-lg border border-white/10 bg-card/95 py-2 pl-4 pr-2 shadow-lg backdrop-blur">
             <span aria-live="polite" className="text-sm">
               {error ? (
                 <span className="text-red-400">{error}</span>

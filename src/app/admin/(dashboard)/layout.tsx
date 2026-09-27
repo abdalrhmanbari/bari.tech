@@ -40,7 +40,7 @@ export default function DashboardLayout({
         </div>
       </header>
 
-      <main className="min-w-0 px-4 pb-28 pt-32 md:ml-56 md:px-8 md:pt-20">
+      <main className="min-w-0 px-4 pb-36 pt-32 md:ml-56 md:px-8 md:pt-20">
         <div className="mx-auto max-w-4xl">{children}</div>
       </main>
     </div>
