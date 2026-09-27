@@ -17,19 +17,45 @@ export async function GET(request: Request) {
   return NextResponse.json({ content });
 }
 
+type Entry = { lang: Lang; data: Record<string, unknown> };
+
+function isEntry(value: unknown): value is Entry {
+  const entry = value as Partial<Entry> | null;
+  return (
+    typeof entry === "object" &&
+    entry !== null &&
+    isLang(entry.lang) &&
+    typeof entry.data === "object" &&
+    entry.data !== null
+  );
+}
+
+/**
+ * Body: `{ section, entries: [{ lang, data }, …] }`. The editor sends both
+ * languages at once for list sections so their order and shared fields
+ * (images, URLs…) stay in step.
+ */
 export async function PUT(request: Request) {
   const body = await request.json().catch(() => null);
-  const lang = body?.lang;
   const section = body?.section;
-  const data = body?.data;
+  const entries: unknown = body?.entries;
 
-  if (!isLang(lang) || !isSectionKey(section) || typeof data !== "object" || data === null) {
+  if (
+    !isSectionKey(section) ||
+    !Array.isArray(entries) ||
+    entries.length === 0 ||
+    !entries.every(isEntry)
+  ) {
     return NextResponse.json({ error: "Invalid payload." }, { status: 400 });
   }
 
   try {
-    const current = (await readOverride(lang)) ?? {};
-    await writeOverride(lang, { ...current, [section]: data });
+    await Promise.all(
+      entries.map(async ({ lang, data }) => {
+        const current = (await readOverride(lang)) ?? {};
+        await writeOverride(lang, { ...current, [section]: data });
+      }),
+    );
     return NextResponse.json({ ok: true });
   } catch {
     return NextResponse.json(

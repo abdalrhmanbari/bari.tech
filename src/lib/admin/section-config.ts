@@ -17,6 +17,12 @@ export type RepeaterBlock = {
   itemLabel: string;
   fields: RowField[];
   emptyRow: Row;
+  /**
+   * Row keys that aren't translated (images, URLs, tech names…). On save they
+   * are copied to the other language's item at the same position, and the
+   * other language's list follows the same order, additions and removals.
+   */
+  sharedFields?: string[];
   /** Transform a stored item into a flat editable row. Defaults to identity. */
   toRow?: (item: Record<string, unknown>) => Row;
   /** Transform an edited row back into the stored item shape. Defaults to identity. */
@@ -81,6 +87,7 @@ export const SECTION_CONFIGS: Record<SectionKey, SectionConfig> = {
           { key: "description", label: "Description", type: "textarea" },
         ],
         emptyRow: { index: "", title: "", description: "" },
+        sharedFields: ["index"],
       },
     ],
   },
@@ -115,6 +122,7 @@ export const SECTION_CONFIGS: Record<SectionKey, SectionConfig> = {
           country: "",
           role: "",
         },
+        sharedFields: ["image", "linkHref", "tech"],
         toRow: (item) => ({
           title: String(item.title ?? ""),
           tag: String(item.tag ?? ""),
@@ -209,6 +217,7 @@ export const SECTION_CONFIGS: Record<SectionKey, SectionConfig> = {
           { key: "answer", label: "Answer", type: "textarea" },
         ],
         emptyRow: { index: "", question: "", answer: "" },
+        sharedFields: ["index"],
       },
     ],
   },
@@ -229,6 +238,7 @@ export const SECTION_CONFIGS: Record<SectionKey, SectionConfig> = {
           { key: "external", label: "Opens externally", type: "checkbox" },
         ],
         emptyRow: { label: "", href: "", value: "", external: false },
+        sharedFields: ["href", "external"],
       },
     ],
   },
