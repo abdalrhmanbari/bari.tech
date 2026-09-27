@@ -35,7 +35,7 @@ export default function OpengraphImage() {
           }}
         >
           <div style={{ width: "40px", height: "1px", background: "#353535" }} />
-          Frontend Developer / Software Engineer
+          Full-Stack Developer / Software Engineer
         </div>
 
         <div style={{ display: "flex", flexDirection: "column", gap: "28px" }}>

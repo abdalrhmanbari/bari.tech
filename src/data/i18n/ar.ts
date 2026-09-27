@@ -22,7 +22,7 @@ export const ar: Dictionary = {
     { label: "الأسئلة الشائعة", href: "#faq" },
     { label: "تواصل", href: "#contact" },
   ],
-  logo: { primary: "البّري", secondary: "مطوّر واجهات أمامية" },
+  logo: { primary: "البّري", secondary: "مطوّر Full-Stack" },
   skipToContent: "تخطَّ إلى المحتوى",
   homeAria: "عبد الرحمن البّري — الصفحة الرئيسية",
   navAria: "الرئيسية",

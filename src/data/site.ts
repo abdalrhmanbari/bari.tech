@@ -34,7 +34,7 @@ export const site = {
   tagline:
     "I build modern, high-performance websites that help businesses create better digital experiences, attract more customers, and grow online.",
   /** Short logo mark in the header: primary word + dimmed descriptor. */
-  logo: { primary: "AL BARI", secondary: "Frontend Developer" },
+  logo: { primary: "AL BARI", secondary: "Full-Stack Developer" },
   /**
    * Contact details — the single source of truth. Edit an address or URL here
    * and it flows to the contact list (both languages), the mobile menu, the
@@ -70,11 +70,12 @@ export const site = {
     { label: "Contact", href: "#contact" },
   ],
   meta: {
-    title: "Abd Alrhman Al Bari — Frontend Developer",
+    title: "Abd Alrhman Al Bari — Full-Stack Developer",
     description:
-      "Portfolio of Abd Alrhman Al Bari, a Frontend Developer and Software Engineering student building fast, responsive web experiences with React, Next.js, TypeScript, and Headless WordPress.",
+      "Portfolio of Abd Alrhman Al Bari, a Full-Stack Developer and Software Engineering student delivering complete web projects end to end — from frontend and backend to CMS dashboards, integrations, and deployment — with React, Next.js, TypeScript, and Headless WordPress.",
     keywords: [
       "Abd Alrhman Al Bari",
+      "Full-Stack Developer",
       "Frontend Developer",
       "Software Engineer",
       "React Developer",

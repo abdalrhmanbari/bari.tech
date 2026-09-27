@@ -94,10 +94,11 @@ const personJsonLd = {
   name: site.name,
   url: SITE_URL,
   email: site.email,
-  jobTitle: ["Frontend Developer", "Software Engineer"],
+  jobTitle: ["Full-Stack Developer", "Software Engineer"],
   description: site.meta.description,
   sameAs: [site.socials.github.url, site.socials.linkedin.url],
   knowsAbout: [
+    "Full-Stack Development",
     "Frontend Development",
     "React",
     "Next.js",
