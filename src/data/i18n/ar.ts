@@ -119,8 +119,8 @@ export const ar: Dictionary = {
         title: "Nextzett",
         tag: "تجارة إلكترونية / Next.js",
         description:
-          "منصة تجارة إلكترونية Headless لعلامة تجارية للعناية بالسيارات. بنيت المتجر كاملاً بـ Next.js فوق WooCommerce: تصفح المنتجات، والبحث والتصفية، وعربة التسوق، وإتمام الشراء، وحسابات العملاء، وتتبع الطلبات، والدفع عبر Stripe.",
-        tech: ["Next.js", "TypeScript", "Headless WooCommerce", "Stripe", "Tailwind CSS"],
+          "منصة تجارة إلكترونية لعلامة تجارية للعناية بالسيارات، بنيتها بالكامل باستخدام Next.js وHeadless WordPress مع WooCommerce: تصفح المنتجات، والبحث والتصفية، وعربة التسوق، وإتمام الشراء، وحسابات العملاء، وتتبع الطلبات، والدفع عبر Stripe.",
+        tech: ["Next.js", "TypeScript", "Headless WordPress", "WooCommerce", "Stripe", "Tailwind CSS"],
         links: [{ label: "قريباً", href: "" }],
         image: "/projects/nextzett.png",
         country: "العراق",
@@ -178,6 +178,17 @@ export const ar: Dictionary = {
         links: [{ label: "زيارة الموقع المباشر", href: "https://beta.terragroup.ae/" }],
         image: "/projects/terra.png",
         country: "الإمارات",
+        role: "تطوير الواجهة الأمامية (React)",
+      },
+      {
+        title: "PPSMS",
+        tag: "نظام إدارة / React.js",
+        description:
+          "نظام لإدارة جمعية غير ربحية في ماليزيا: طلبات الأعضاء، وبيانات الأزواج والعائلات، والوثائق، ومتابعة حالات IMM13 وبطاقات UNHCR، وتوليد ملفات PDF، والتقارير وإحصائيات البرامج. بنيت الواجهة الأمامية بـ React وMaterial UI.",
+        tech: ["React.js", "Material UI"],
+        links: [{ label: "نظام داخلي", href: "" }],
+        image: "/projects/ppsms.png",
+        country: "ماليزيا",
         role: "تطوير الواجهة الأمامية (React)",
       },
     ],

@@ -40,8 +40,8 @@ export const projects: Project[] = [
     title: "Nextzett",
     tag: "E-commerce / Next.js",
     description:
-      "Headless e-commerce platform for an automotive care brand. I built the full storefront in Next.js on top of WooCommerce: product browsing, search and filtering, cart, checkout, customer accounts, order tracking, and Stripe payments.",
-    tech: ["Next.js", "TypeScript", "Headless WooCommerce", "Stripe", "Tailwind CSS"],
+      "E-commerce platform for an automotive care brand, built end to end with Next.js and Headless WordPress + WooCommerce: product browsing, search and filtering, cart, checkout, customer accounts, order tracking, and Stripe payments.",
+    tech: ["Next.js", "TypeScript", "Headless WordPress", "WooCommerce", "Stripe", "Tailwind CSS"],
     links: [{ label: "Coming Soon", href: "" }],
     image: "/projects/nextzett.png",
     country: "Iraq",
@@ -99,6 +99,17 @@ export const projects: Project[] = [
     links: [{ label: "Visit Live Site", href: "https://beta.terragroup.ae/" }],
     image: "/projects/terra.png",
     country: "United Arab Emirates",
+    role: "Frontend Development (React)",
+  },
+  {
+    title: "PPSMS",
+    tag: "Management System / React.js",
+    description:
+      "Management system for a non-profit association in Malaysia: member applications, spouse and family records, documents, IMM13 and UNHCR status tracking, PDF generation, reports, and programme statistics. I built the React front-end with Material UI.",
+    tech: ["React.js", "Material UI"],
+    links: [{ label: "Private System", href: "" }],
+    image: "/projects/ppsms.png",
+    country: "Malaysia",
     role: "Frontend Development (React)",
   },
 ];
