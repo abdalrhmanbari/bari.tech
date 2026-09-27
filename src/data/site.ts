@@ -28,7 +28,7 @@ export const site = {
   titleLines: ["ABD ALRHMAN", "AL BARI"],
   role: "Full-Stack Developer / Software Engineer",
   /** Small eyebrow above the hero headline. */
-  kicker: "Full-Stack Developer · Next.js · WordPress",
+  kicker: "Next.js · Headless WordPress",
   /** Role chips shown under the hero headline, separated by dots. */
   roles: ["Software Engineer & Full-Stack Developer"],
   tagline:

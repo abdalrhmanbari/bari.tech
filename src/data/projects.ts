@@ -89,6 +89,7 @@ export const projects: Project[] = [
     links: [{ label: "Visit Live Site", href: "https://aurodia.de/" }],
     image: "/projects/aurodia.png",
     country: "Germany",
+    role: "WordPress Development",
   },
   {
     title: "Terra Group",

@@ -19,6 +19,6 @@ export const experience: ExperienceItem[] = [
     role: "Software Engineering Student",
     org: "Qasioun Private University",
     description:
-      "Studying Software Engineering with a focus on programming, data structures, algorithms, software development, and engineering fundamentals.",
+      "Pursuing a B.Sc. in Software Engineering, with a focus on software development, web technologies, and practical project-based learning.",
   },
 ];
