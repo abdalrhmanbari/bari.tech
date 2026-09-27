@@ -102,6 +102,7 @@ export const SECTION_CONFIGS: Record<SectionKey, SectionConfig> = {
           { key: "linkHref", label: "Link URL", type: "text" },
           { key: "image", label: "Image", type: "image" },
           { key: "country", label: "Country", type: "text" },
+          { key: "role", label: "My role", type: "text" },
         ],
         emptyRow: {
           title: "",
@@ -112,6 +113,7 @@ export const SECTION_CONFIGS: Record<SectionKey, SectionConfig> = {
           linkHref: "",
           image: "",
           country: "",
+          role: "",
         },
         toRow: (item) => ({
           title: String(item.title ?? ""),
@@ -122,6 +124,7 @@ export const SECTION_CONFIGS: Record<SectionKey, SectionConfig> = {
           linkHref: String((item.links as Array<{ href?: string }>)?.[0]?.href ?? ""),
           image: String(item.image ?? ""),
           country: String(item.country ?? ""),
+          role: String(item.role ?? ""),
         }),
         fromRow: (row) => {
           const links = row.linkHref || row.linkLabel
@@ -135,6 +138,7 @@ export const SECTION_CONFIGS: Record<SectionKey, SectionConfig> = {
             links,
             ...(row.image ? { image: row.image } : {}),
             ...(row.country ? { country: row.country } : {}),
+            ...(row.role ? { role: row.role } : {}),
           };
         },
       },

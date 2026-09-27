@@ -59,6 +59,7 @@ export const en: Dictionary = {
   projects: {
     eyebrow: "Selected Work",
     title: "Projects I’ve built, from goals to launch.",
+    roleLabel: "Role",
     items: projects.map((project) => ({
       title: project.title,
       tag: project.tag,
@@ -67,6 +68,7 @@ export const en: Dictionary = {
       links: project.links.map((link) => ({ label: link.label, href: link.href })),
       image: project.image,
       country: project.country,
+      role: project.role,
     })),
   },
 

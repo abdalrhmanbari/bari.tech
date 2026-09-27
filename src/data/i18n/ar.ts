@@ -30,11 +30,11 @@ export const ar: Dictionary = {
   menuClose: "أغلق القائمة",
 
   hero: {
-    kicker: "مطوّر واجهات أمامية · React · Next.js",
+    kicker: "مطوّر Full-Stack · Next.js · WordPress",
     titleLines: ["عبد الرحمن", "البّري"],
-    roles: ["مهندس برمجيات ومطوّر واجهات أمامية"],
+    roles: ["مهندس برمجيات ومطوّر Full-Stack"],
     tagline:
-      "أبني مواقع حديثة عالية الأداء تساعد الشركات على تقديم تجارب رقمية أفضل، وجذب المزيد من العملاء، والنموّ عبر الإنترنت.",
+      "أبني مواقع وتطبيقات ويب متكاملة من الألف إلى الياء باستخدام Next.js و React وووردبريس Headless — من التصميم والتطوير إلى إدارة المحتوى والربط مع الخدمات والإطلاق.",
     viewProjects: "عرض المشاريع",
     contactMe: "تواصل معي",
     scroll: "مرّر للأسفل",
@@ -43,17 +43,17 @@ export const ar: Dictionary = {
   about: {
     eyebrow: "نبذة",
     heading:
-      "بناء واجهات حديثة مع التركيز على الجودة والأداء وتجربة المستخدم.",
+      "بناء حلول ويب متكاملة، من الفكرة الأولى حتى الإطلاق.",
     paragraphs: [
-      "أنا طالب هندسة برمجيات ومطوّر واجهات أمامية بخبرة تقارب عامين في بناء مواقع وتطبيقات ويب حديثة ومتجاوبة تركّز على الأداء.",
-      "أتخصّص في React و Next.js و TypeScript، مع تركيز قوي على واجهات نظيفة ومكوّنات قابلة لإعادة الاستخدام وتصميم متجاوب وأداء عالٍ وتجربة مستخدم متميّزة.",
-      "عملت على مشاريع لعملاء دوليين في ألمانيا والسعودية والإمارات، تشمل متاجر إلكترونية ومواقع شركات ومنصّات لحجز الخدمات، مع التركيز على تقديم واجهات مدروسة ووظائف عملية وتجارب سريعة.",
-      "يهمّني بناء واجهات أمامية قابلة للصيانة بتدفّق بيانات واضح وتفاعلات سهلة الوصول وتجارب سريعة تعمل بسلاسة على مختلف الأجهزة.",
+      "أنا مطوّر Full-Stack وطالب هندسة برمجيات بخبرة تزيد عن عامين في بناء مواقع وتطبيقات ويب للشركات والمؤسسات.",
+      "أعمل بـ Next.js و React و TypeScript وووردبريس Headless لبناء حلول ويب متكاملة — من تخطيط البنية وتطوير الواجهة إلى ربط أنظمة إدارة المحتوى والـ APIs ولوحات التحكم والربط مع الخدمات الخارجية وتحسين الأداء والنشر.",
+      "عملت على مشاريع لعملاء دوليين في ألمانيا والسعودية والإمارات والعراق، تشمل متاجر إلكترونية ومواقع شركات ومنصّات حجز ولوحات تحكم مخصّصة.",
+      "أركّز على بناء مواقع ليست حديثة ومتجاوبة فحسب، بل سهلة الإدارة وسريعة ومتوافقة مع أهداف العمل.",
     ],
     facts: [
       { value: "+2", label: "سنوات الخبرة" },
-      { value: "+6", label: "مشاريع منجزة" },
-      { value: "SE", label: "طالب هندسة برمجيات" },
+      { value: "+7", label: "مشاريع منجزة" },
+      { value: "E2E", label: "تسليم متكامل من الفكرة للإطلاق" },
       { value: "International", label: "عملاء دوليون" },
     ],
   },
@@ -102,36 +102,62 @@ export const ar: Dictionary = {
   projects: {
     eyebrow: "أعمال مختارة",
     title: "مشاريع بنيتُها، من الهدف إلى الإطلاق.",
+    roleLabel: "الدور",
     items: [
       {
-        title: "Bombo Car Wash",
-        tag: "خدمات / حجوزات / Next.js",
+        title: "DigitStone",
+        tag: "مواقع شركات / Next.js",
         description:
-          "منصّة حديثة لخدمات غسيل السيارات مبنية بـ Next.js وووردبريس Headless، تتضمّن نظام حجز مواعيد متعدّد الخطوات، وإدارة ديناميكية للخدمات، وآراء العملاء، وإدارة للمحتوى، ومساعداً ذكياً للعملاء.",
-        tech: ["Next.js", "TypeScript", "Tailwind CSS", "Headless WordPress", "Framer Motion"],
-        links: [{ label: "قريباً", href: "" }],
-        image: "/projects/bombo.png",
-        country: "العراق",
+          "موقع لشركة برمجيات ألمانية، بنيته بالكامل باستخدام Next.js وHeadless WordPress: عرض ديناميكي للخدمات ودراسات الحالة، ودعم تعدد اللغات، ونظام لحجز المواعيد، ولوحة تحكم مخصصة لإدارة المحتوى دون الحاجة لتعديل الكود.",
+        tech: ["Next.js", "TypeScript", "Headless WordPress", "Tailwind CSS"],
+        links: [{ label: "زيارة الموقع المباشر", href: "https://digitstone.tech/" }],
+        image: "/projects/digitstone.png",
+        country: "ألمانيا",
+        role: "تطوير Full-Stack",
       },
       {
         title: "Nextzett",
         tag: "تجارة إلكترونية / Next.js",
         description:
-          "متجر إلكتروني حديث لمنتجات العناية بالسيارات مبني بـ Next.js وWooCommerce، يتضمّن استكشاف المنتجات، وبحثاً وتصفيةً متقدّمين، ومسار سلّة ودفع، وحسابات للعملاء، وتتبّع الطلبات، ومدفوعات Stripe.",
-        tech: ["Next.js", "TypeScript", "WooCommerce", "Stripe", "Tailwind CSS"],
+          "منصة تجارة إلكترونية Headless لعلامة تجارية للعناية بالسيارات. بنيت المتجر كاملاً بـ Next.js فوق WooCommerce: تصفح المنتجات، والبحث والتصفية، وعربة التسوق، وإتمام الشراء، وحسابات العملاء، وتتبع الطلبات، والدفع عبر Stripe.",
+        tech: ["Next.js", "TypeScript", "Headless WooCommerce", "Stripe", "Tailwind CSS"],
         links: [{ label: "قريباً", href: "" }],
         image: "/projects/nextzett.png",
         country: "العراق",
+        role: "تطوير Full-Stack",
       },
       {
-        title: "DigitStone",
+        title: "Bombo Car Wash",
+        tag: "حجوزات / Next.js",
+        description:
+          "منصة لخدمات غسيل السيارات، بنيتها بالكامل باستخدام Next.js وHeadless WordPress: نظام حجز مواعيد متعدد الخطوات، وإدارة ديناميكية للخدمات، وآراء العملاء، ولوحة تحكم مخصصة لإدارة محتوى الموقع والحجوزات.",
+        tech: ["Next.js", "TypeScript", "Headless WordPress", "Tailwind CSS", "Framer Motion"],
+        links: [{ label: "قريباً", href: "" }],
+        image: "/projects/bombo.png",
+        country: "العراق",
+        role: "تطوير Full-Stack",
+      },
+      {
+        title: "MAHAM",
         tag: "مواقع شركات / Next.js",
         description:
-          "موقع لوكالة رقمية مبني بـ Next.js وWordPress Headless، يتضمّن خدمات ديناميكية، ودراسات حالة، ومدوّنة متعدّدة اللغات، ونظام حجز مواعيد، ومساعداً ذكياً للموقع.",
-        tech: ["Next.js", "TypeScript", "Tailwind CSS", "Headless WordPress"],
-        links: [{ label: "زيارة المشروع", href: "https://digitstone.tech/" }],
-        image: "/projects/digitstone.png",
-        country: "ألمانيا",
+          "موقع لعرض أعمال شركة هندسية، بنيته بالكامل باستخدام Next.js وHeadless WordPress: عرض ديناميكي لمحتوى المشاريع، ودعم تعدد اللغات، ولوحة تحكم مخصصة لإدارة محتوى الموقع.",
+        tech: ["Next.js", "TypeScript", "Headless WordPress", "Tailwind CSS"],
+        links: [{ label: "زيارة الموقع المباشر", href: "https://mahameng.com/" }],
+        image: "/projects/maham.png",
+        country: "إيطاليا",
+        role: "تطوير Full-Stack",
+      },
+      {
+        title: "Marasil",
+        tag: "خدمات لوجستية / React.js",
+        description:
+          "منصة لوجستية لإدارة الشحنات وأسعار الشحن وتتبع الطلبات، والتكامل مع كبرى منصات التجارة الإلكترونية والتوصيل. عملت على الواجهة الأمامية بـ React وربطها مع الـ REST APIs الخاصة بالمنصة.",
+        tech: ["React.js", "TypeScript", "Tailwind CSS", "REST APIs"],
+        links: [{ label: "زيارة الموقع المباشر", href: "https://www.marasil.sa/" }],
+        image: "/projects/marasil.png",
+        country: "السعودية",
+        role: "تطوير الواجهة الأمامية (React)",
       },
       {
         title: "Aurodia",
@@ -139,39 +165,20 @@ export const ar: Dictionary = {
         description:
           "موقع تجارة إلكترونية لمجوهرات فاخرة مبني بـ WordPress وWooCommerce، يتضمّن استكشاف المنتجات، وتجربة تسوّق متجاوبة، وحسابات للعملاء، ومسار دفع متكامل.",
         tech: ["WordPress", "WooCommerce", "Elementor", "JavaScript"],
-        links: [{ label: "زيارة المشروع", href: "https://aurodia.de/" }],
+        links: [{ label: "زيارة الموقع المباشر", href: "https://aurodia.de/" }],
         image: "/projects/aurodia.png",
         country: "ألمانيا",
-      },
-      {
-        title: "Marasil",
-        tag: "خدمات لوجستية / React.js",
-        description:
-          "منصّة لوجستية حديثة لإدارة الشحنات وأسعار الشحن وتتبّع الطلبات، والتكامل مع كبرى منصّات التجارة الإلكترونية والتوصيل.",
-        tech: ["React.js", "TypeScript", "Tailwind CSS", "REST APIs"],
-        links: [{ label: "زيارة المشروع", href: "https://www.marasil.sa/" }],
-        image: "/projects/marasil.png",
-        country: "السعودية",
-      },
-      {
-        title: "MAHAM",
-        tag: "مواقع شركات / Next.js",
-        description:
-          "موقع شركة حديث لمكتب استشارات هندسية، مبني بـ Next.js وووردبريس Headless لتقديم خدمات منظَّمة ومحتوى الشركة والمقالات وتجربة استخدام متجاوبة.",
-        tech: ["Next.js", "Headless WordPress", "TypeScript", "Tailwind CSS"],
-        links: [{ label: "زيارة المشروع", href: "https://mahameng.com/" }],
-        image: "/projects/maham.png",
-        country: "إيطاليا",
       },
       {
         title: "Terra Group",
         tag: "مواقع شركات / React.js",
         description:
-          "موقع شركة لمكتب استشارات هندسية وتصميم، مبني بـ React وTypeScript بتخطيطات متجاوبة ومكوّنات واجهة قابلة لإعادة الاستخدام.",
+          "موقع شركة لمكتب استشارات هندسية وتصميم. بنيت الواجهة الأمامية بـ React وTypeScript بتخطيطات متجاوبة ومكوّنات واجهة قابلة لإعادة الاستخدام.",
         tech: ["React", "TypeScript", "Tailwind CSS"],
-        links: [{ label: "زيارة المشروع", href: "https://beta.terragroup.ae/" }],
+        links: [{ label: "زيارة الموقع المباشر", href: "https://beta.terragroup.ae/" }],
         image: "/projects/terra.png",
         country: "الإمارات",
+        role: "تطوير الواجهة الأمامية (React)",
       },
     ],
   },
@@ -182,9 +189,9 @@ export const ar: Dictionary = {
     items: [
       {
         date: "2024 — الآن",
-        role: "مطوّر واجهات أمامية",
+        role: "مطوّر Full-Stack",
         description:
-          "بناء مواقع وتطبيقات ويب إنتاجية باستخدام React و Next.js و TypeScript وووردبريس Headless، تشمل التجارة الإلكترونية ومواقع الشركات ومنصّات الحجز.",
+          "بناء مواقع وتطبيقات ويب متكاملة للشركات والمؤسسات، والعمل على كامل مراحل التطوير من التخطيط وتنفيذ الواجهات إلى ربط أنظمة إدارة المحتوى والـ APIs ولوحات التحكم والربط مع الخدمات والأداء والنشر.",
       },
       {
         date: "2022 — الآن",
@@ -201,33 +208,28 @@ export const ar: Dictionary = {
     title: "التقنيات التي أبني بها.",
     groups: [
       {
-        title: "أُطُر العمل",
-        items: ["React.js", "Next.js (App Router)", "React Query"],
+        title: "الواجهة الأمامية",
+        items: ["React.js", "Next.js (App Router)", "TypeScript", "Tailwind CSS", "Framer Motion", "React Query"],
       },
       {
-        title: "اللغات",
-        items: ["TypeScript", "JavaScript (ES6+)", "HTML5", "CSS3"],
+        title: "الخلفية والـ APIs",
+        items: ["Next.js API Routes", "Server Components", "REST APIs", "المصادقة والـ Middleware"],
       },
       {
-        title: "التنسيق",
-        items: ["Tailwind CSS", "Framer Motion", "تصميم متجاوب", "CSS Modules"],
+        title: "إدارة المحتوى والتجارة الإلكترونية",
+        items: ["Headless WordPress", "WordPress", "WooCommerce", "لوحات تحكم مخصّصة"],
       },
       {
-        title: "إدارة المحتوى والبيانات",
-        items: ["Headless WordPress", "WooCommerce", "REST APIs"],
+        title: "الربط مع الخدمات",
+        items: ["مدفوعات Stripe", "البريد / SMTP", "مساعدات ذكاء اصطناعي", "أنظمة الحجز"],
       },
       {
-        title: "الأدوات",
-        items: ["Git", "GitHub", "VS Code", "Vercel"],
+        title: "النشر والاستضافة",
+        items: ["Netlify", "Vercel", "الدومين و DNS و SSL", "Git و GitHub"],
       },
       {
         title: "الممارسات",
-        items: [
-          "مكوّنات قابلة لإعادة الاستخدام",
-          "الأداء",
-          "سهولة الوصول",
-          "تحسين محركات البحث",
-        ],
+        items: ["الأداء", "تحسين محركات البحث", "سهولة الوصول", "تصميم متجاوب"],
       },
     ],
   },

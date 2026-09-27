@@ -20,6 +20,8 @@ export type ProjectEntry = {
   image?: string;
   /** Country the project's owner / client is based in. */
   country?: string;
+  /** What I did on the project (e.g. "Full-Stack Development"). Shown under the title. */
+  role?: string;
 };
 
 export type ServiceEntry = { index: string; title: string; description: string };
@@ -84,6 +86,8 @@ export type Dictionary = {
   projects: {
     eyebrow: string;
     title: string;
+    /** Prefix shown before each project's role, e.g. "Role". */
+    roleLabel: string;
     items: ProjectEntry[];
   };
 

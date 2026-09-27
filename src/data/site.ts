@@ -26,13 +26,13 @@ export const site = {
   name: "Abd Alrhman Al Bari",
   /** Two display lines used by the masked hero headline. */
   titleLines: ["ABD ALRHMAN", "AL BARI"],
-  role: "Frontend Developer / Software Engineer",
+  role: "Full-Stack Developer / Software Engineer",
   /** Small eyebrow above the hero headline. */
-  kicker: "Frontend Developer · React · Next.js",
+  kicker: "Full-Stack Developer · Next.js · WordPress",
   /** Role chips shown under the hero headline, separated by dots. */
-  roles: ["Software Engineer & Frontend Developer"],
+  roles: ["Software Engineer & Full-Stack Developer"],
   tagline:
-    "I build modern, high-performance websites that help businesses create better digital experiences, attract more customers, and grow online.",
+    "I build complete websites and web applications from A to Z using Next.js, React, and Headless WordPress — from design and development to CMS, integrations, and deployment.",
   /** Short logo mark in the header: primary word + dimmed descriptor. */
   logo: { primary: "AL BARI", secondary: "Full-Stack Developer" },
   /**

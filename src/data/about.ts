@@ -1,22 +1,22 @@
 
 
 export const about = {
-  heading: "Building modern interfaces with a focus on quality, performance, and user experience.",
+  heading: "Building complete web solutions, from the first idea to launch.",
 
   paragraphs: [
-    "I'm a Software Engineering student and Frontend Developer with around two years of experience building modern, responsive, and performance-focused websites and web applications.",
+    "I'm a Full-Stack Developer and Software Engineering student with 2+ years of experience building websites and web applications for businesses and organizations.",
 
-    "I specialize in React, Next.js, and TypeScript, with a strong focus on clean UI, reusable components, responsive design, performance, and user experience.",
+    "I work with Next.js, React, TypeScript, and Headless WordPress to build complete web solutions — from planning the structure and developing the interface to CMS integration, APIs, dashboards, third-party integrations, performance optimization, and deployment.",
 
-    "I've worked on projects for international clients in Germany, Saudi Arabia, and the UAE, including e-commerce storefronts, corporate websites, and service-booking platforms, focusing on delivering thoughtful interfaces, practical functionality, and fast experiences.",
+    "I've worked on projects for international clients in Germany, Saudi Arabia, the UAE, and Iraq, including e-commerce stores, corporate websites, booking platforms, and custom dashboards.",
 
-    "I care about building maintainable front-ends with predictable data flow, accessible interactions, and fast experiences that work smoothly across devices.",
+    "I focus on building websites that are not only modern and responsive, but also easy to manage, performant, and aligned with the goals of the business.",
   ],
 
   facts: [
     { value: "2+", label: "Years of Experience" },
-    { value: "6+", label: "Projects Shipped" },
-    { value: "SE", label: "Software Engineering Student" },
+    { value: "7+", label: "Projects Delivered" },
+    { value: "E2E", label: "End-to-End Delivery" },
     { value: "International", label: "International Clients" },
   ],
 } as const;

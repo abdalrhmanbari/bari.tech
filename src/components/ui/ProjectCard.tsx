@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import { useTilt } from "@/hooks/useTilt";
 import { revealVariants, revealViewport } from "@/lib/motion";
 import { useReducedMotionSafe } from "@/hooks/useReducedMotionSafe";
+import { useLanguage } from "@/components/i18n/LanguageProvider";
 import type { ProjectEntry } from "@/data/i18n/types";
 
 export function ProjectCard({
@@ -15,6 +16,7 @@ export function ProjectCard({
   project: ProjectEntry;
   index: number;
 }) {
+  const { dict } = useLanguage();
   const reduce = useReducedMotionSafe();
   const tilt = useTilt<HTMLElement>(6);
   const label = String(index + 1).padStart(2, "0");
@@ -80,6 +82,12 @@ export function ProjectCard({
           )}
         </p>
         <h3 className="mb-2.5 text-[30px]">{project.title}</h3>
+        {project.role && (
+          <p className="mb-3 text-[13px] tracking-[0.05em] text-ink-primary">
+            <span className="text-ink-muted">{dict.projects.roleLabel}:</span>{" "}
+            {project.role}
+          </p>
+        )}
         <p className="mb-[22px] max-w-[440px] text-[15px] text-ink-secondary">
           {project.description}
         </p>

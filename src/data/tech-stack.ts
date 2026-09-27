@@ -7,27 +7,27 @@ export type StackGroup = {
 
 export const techStack: StackGroup[] = [
   {
-    title: "Frameworks",
-    items: ["React.js", "Next.js (App Router)", "React Query", ],
+    title: "Frontend",
+    items: ["React.js", "Next.js (App Router)", "TypeScript", "Tailwind CSS", "Framer Motion", "React Query"],
   },
   {
-    title: "Languages",
-    items: ["TypeScript", "JavaScript (ES6+)", "HTML5", "CSS3"],
+    title: "Backend & APIs",
+    items: ["Next.js API Routes", "Server Components", "REST APIs", "Authentication & Middleware"],
   },
   {
-    title: "Styling",
-    items: ["Tailwind CSS", "Framer Motion", "Responsive Design", "CSS Modules"],
+    title: "CMS & E-commerce",
+    items: ["Headless WordPress", "WordPress", "WooCommerce", "Custom Admin Dashboards"],
   },
   {
-    title: "CMS & Data",
-    items: ["Headless WordPress", "WooCommerce", "REST APIs"],
+    title: "Integrations",
+    items: ["Stripe Payments", "Email / SMTP", "AI Assistants", "Booking Systems"],
   },
   {
-    title: "Tooling",
-    items: ["Git", "GitHub", "VS Code", "Vercel"],
+    title: "Deployment & DevOps",
+    items: ["Netlify", "Vercel", "Domains, DNS & SSL", "Git & GitHub"],
   },
   {
     title: "Practices",
-    items: ["Reusable Components", "Performance", "Accessibility", "SEO"],
+    items: ["Performance", "SEO", "Accessibility", "Responsive Design"],
   },
 ];
