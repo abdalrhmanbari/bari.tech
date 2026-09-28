@@ -9,7 +9,7 @@ export const services: ServiceItem[] = [
     index: "01",
     title: "End-to-End Web Development",
     description:
-      "From idea to launch: UI design, a fast Next.js front-end, a Headless WordPress CMS you can manage yourself, and deployment with your domain and SSL. Corporate websites, booking platforms, and content-driven sites.",
+      "From idea to launch: UI design, a fast Next.js front-end, a Headless WordPress backend with a custom dashboard you can manage yourself, and deployment with your domain and SSL. Corporate websites, booking platforms, and content-driven sites.",
   },
   {
     index: "02",

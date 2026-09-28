@@ -9,19 +9,19 @@ export const faq: FaqItem[] = [
     index: "01",
     question: "What does “from A to Z” actually include?",
     answer:
-      "Everything needed to take your website from idea to launch: planning the structure, UI design (or building from your existing design), developing the front-end in Next.js, setting up WordPress as a headless CMS, custom dashboards, integrations like payments and booking, performance and SEO, and deployment with your domain and SSL. You deal with one person for the whole project.",
+      "Everything needed to take your website from idea to launch: planning the structure, UI design (or building from your existing design), developing the front-end in Next.js, setting up Headless WordPress as the backend, a custom dashboard for managing your content, integrations like payments and booking, performance and SEO, and deployment with your domain and SSL. You deal with one person for the whole project.",
   },
   {
     index: "02",
     question: "Will I be able to update the content myself?",
     answer:
-      "Yes. Your content is managed from a WordPress dashboard, so you can edit pages, services, projects, and posts without touching any code.",
+      "Yes. I build a custom dashboard tailored to your website, so you can easily edit pages, services, projects, and posts without touching any code or dealing with a complicated admin panel.",
   },
   {
     index: "03",
     question: "Why Next.js with Headless WordPress instead of a regular WordPress site?",
     answer:
-      "You get the best of both: a fast, secure, SEO-friendly website built with Next.js, and the familiar WordPress dashboard for managing your content. The front-end isn’t tied to themes or heavy plugins, so the site stays fast and easy to grow.",
+      "You get a fast, secure, SEO-friendly website built with Next.js, powered by WordPress as a reliable backend, and managed through a simple dashboard designed around your content. The front-end isn’t tied to themes or heavy plugins, so the site stays fast and easy to grow.",
   },
   {
     index: "04",
