@@ -16,7 +16,7 @@ type Fields = Record<string, string | string[]>;
 const otherLang = (l: Lang): Lang => (l === "en" ? "ar" : "en");
 
 async function fetchSection(lang: Lang, section: SectionKey) {
-  const res = await fetch(`/api/admin/content?lang=${lang}`);
+  const res = await fetch(`/api/admin/content?lang=${lang}`, { cache: "no-store" });
   const body = await res.json();
   if (!res.ok) throw new Error(body.error ?? "Failed to load content.");
   return body.content[section] as Record<string, unknown>;

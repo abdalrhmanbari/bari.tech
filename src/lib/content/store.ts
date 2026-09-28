@@ -9,9 +9,13 @@ const STORE_NAME = "cms-content";
  * as a Netlify Function (which the Next.js Runtime uses for API routes and
  * server components). Outside that context — e.g. plain `next dev` — it
  * throws, so callers must handle the failure.
+ *
+ * Strong consistency: the admin editor saves both languages and then reads
+ * them back (and the PUT route read-modify-writes the whole override), so a
+ * stale read would silently undo or misalign recent edits.
  */
 function store() {
-  return getStore(STORE_NAME);
+  return getStore({ name: STORE_NAME, consistency: "strong" });
 }
 
 /** Returns `null` when no override has been saved yet, or storage is unreachable. */
