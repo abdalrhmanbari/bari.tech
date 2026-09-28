@@ -36,6 +36,7 @@ export const en: Dictionary = {
     tagline: site.tagline,
     viewProjects: "View Projects",
     contactMe: "Contact Me",
+    getQuote: "Get a Quote",
     scroll: "Scroll",
   },
 
@@ -125,6 +126,76 @@ export const en: Dictionary = {
         "Couldn't send your message — please try again or email me directly.",
       subject: "Portfolio enquiry from {name}",
     },
+  },
+
+  quote: {
+    eyebrow: "Get a Quote",
+    title: "Tell me about your project.",
+    intro:
+      "Answer a few quick questions and I’ll send you a clear offer with the price and timeline within 5 hours at most.",
+    backHome: "Back to home",
+    sections: {
+      project: "Your project",
+      scope: "Size & features",
+      timing: "Timeline & budget",
+      contact: "Your details",
+    },
+    projectType: {
+      label: "What do you need?",
+      options: {
+        corporate: "Company website",
+        ecommerce: "Online store",
+        booking: "Booking platform",
+        dashboard: "Dashboard / system",
+        improve: "Improve an existing website",
+        other: "Something else",
+      },
+    },
+    description: {
+      label: "Describe your idea",
+      placeholder: "What should the website do, who is it for, and any websites you like…",
+    },
+    currentUrl: { label: "Current website", placeholder: "https://" },
+    pages: {
+      label: "How many pages, roughly?",
+      options: { "1-5": "1–5", "5-10": "5–10", "10+": "More than 10", unsure: "Not sure" },
+    },
+    features: {
+      label: "Features you need",
+      options: {
+        dashboard: "Content dashboard",
+        payments: "Online payments",
+        booking: "Bookings",
+        multilingual: "Multiple languages",
+        accounts: "User accounts",
+        blog: "Blog",
+        integrations: "Integrations with other services",
+      },
+    },
+    design: {
+      label: "Design",
+      options: { need: "I need a design", have: "I already have a design" },
+    },
+    timeline: {
+      label: "When do you need it?",
+      options: {
+        urgent: "As soon as possible",
+        month: "Within a month",
+        quarter: "In 1–3 months",
+        flexible: "I’m flexible",
+      },
+    },
+    budget: { label: "Budget", placeholder: "e.g. $1,000" },
+    name: "Your Name",
+    email: "Email Address",
+    whatsapp: "WhatsApp",
+    country: "Country",
+    optional: "optional",
+    send: "Send Request",
+    sending: "Sending…",
+    success: "Thanks! Your request is in — I’ll send you an offer with the price and timeline within 5 hours.",
+    error: "Please choose a project type, describe your idea, and enter your name and a valid email.",
+    networkError: "Couldn't send your request — please try again or email me directly.",
   },
 
   footer: {

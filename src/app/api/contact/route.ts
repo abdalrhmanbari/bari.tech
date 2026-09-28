@@ -1,6 +1,13 @@
 import { NextResponse } from "next/server";
-import nodemailer from "nodemailer";
 import { saveMessage } from "@/lib/messages/store";
+import {
+  EMAIL_RE,
+  MailNotConfiguredError,
+  clean,
+  escapeHtml,
+  mailErrorCode,
+  sendMail,
+} from "@/lib/mail";
 
 // nodemailer needs the Node.js runtime; it cannot run on the Edge runtime.
 export const runtime = "nodejs";
@@ -14,23 +21,9 @@ type Payload = {
   company?: unknown;
 };
 
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
 // Fixed subject for every submission — the sender's name/project details
 // belong in the body, not the subject line.
 const EMAIL_SUBJECT = "عميل محتمل";
-
-function clean(value: unknown, max: number): string {
-  return typeof value === "string" ? value.trim().slice(0, max) : "";
-}
-
-function escapeHtml(value: string): string {
-  return value
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;");
-}
 
 function buildEmailHtml(name: string, email: string, message: string): string {
   const safeName = escapeHtml(name);
@@ -111,49 +104,29 @@ export async function POST(request: Request) {
   // (e.g. running under plain `next dev` without Netlify Blobs) or if the
   // email send below fails.
   try {
-    await saveMessage({ name, email, message });
+    await saveMessage({ name, email, message, kind: "contact" });
   } catch (err) {
     console.error("Contact form: failed to save message for the dashboard.", err);
   }
 
-  const user = process.env.GMAIL_USER;
-  const pass = process.env.GMAIL_APP_PASSWORD?.replace(/\s+/g, "");
-  const to = process.env.CONTACT_TO || user;
-
-  if (!user || !pass) {
-    console.error(
-      "Contact form: GMAIL_USER and/or GMAIL_APP_PASSWORD are not set.",
-    );
-    return NextResponse.json(
-      { error: "The contact form is not configured on the server." },
-      { status: 500 },
-    );
-  }
-
-  const transporter = nodemailer.createTransport({
-    service: "gmail",
-    auth: { user, pass },
-    // Fail fast when the SMTP connection is blocked or slow (common on
-    // serverless hosts) instead of hanging until the function is killed.
-    connectionTimeout: 10_000,
-    greetingTimeout: 10_000,
-    socketTimeout: 20_000,
-  });
-
   try {
-    await transporter.sendMail({
-      from: `"Portfolio contact" <${user}>`,
-      to,
-      replyTo: `"${name.replace(/"/g, "")}" <${email}>`,
+    await sendMail({
+      fromName: "Portfolio contact",
+      replyToName: name,
+      replyToEmail: email,
       subject: EMAIL_SUBJECT,
       text: `${EMAIL_SUBJECT}\n\nName: ${name}\nEmail: ${email}\n\n${message}`,
       html: buildEmailHtml(name, email, message),
     });
   } catch (err) {
-    const code =
-      err && typeof err === "object" && "code" in err
-        ? String((err as { code?: unknown }).code)
-        : "UNKNOWN";
+    if (err instanceof MailNotConfiguredError) {
+      console.error(`Contact form: ${err.message}`);
+      return NextResponse.json(
+        { error: "The contact form is not configured on the server." },
+        { status: 500 },
+      );
+    }
+    const code = mailErrorCode(err);
     console.error(`Contact form: sendMail failed (${code}).`, err);
     return NextResponse.json(
       { error: "Could not send the message. Please email me directly.", code },

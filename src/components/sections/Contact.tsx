@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { Reveal } from "@/components/ui/Reveal";
 import { Section } from "@/components/ui/Section";
@@ -29,6 +30,16 @@ export function Contact() {
             <p className="mt-6 max-w-[460px] text-[16px] text-ink-secondary">
               {contact.text}
             </p>
+          </Reveal>
+
+          <Reveal delay={0.08}>
+            <Link
+              href="/quote"
+              className="mt-6 inline-flex items-center gap-2 border-b border-hair pb-[3px] text-[14px] tracking-[0.05em] text-ink-primary transition-colors duration-300 hover:border-ink-primary"
+            >
+              {dict.hero.getQuote}
+              <span aria-hidden="true">{arrow}</span>
+            </Link>
           </Reveal>
 
           <div className="mt-11 flex flex-col">

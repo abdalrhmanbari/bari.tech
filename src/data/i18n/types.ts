@@ -7,6 +7,19 @@
 export type Lang = "en" | "ar";
 
 export type NavItem = { label: string; href: string };
+
+/** Option keys for the quote form. The API validates against these same lists. */
+export const QUOTE_PROJECT_TYPES = ["corporate", "ecommerce", "booking", "dashboard", "improve", "other"] as const;
+export const QUOTE_PAGES = ["1-5", "5-10", "10+", "unsure"] as const;
+export const QUOTE_FEATURES = ["dashboard", "payments", "booking", "multilingual", "accounts", "blog", "integrations"] as const;
+export const QUOTE_DESIGN = ["need", "have"] as const;
+export const QUOTE_TIMELINES = ["urgent", "month", "quarter", "flexible"] as const;
+export type QuoteProjectType = (typeof QUOTE_PROJECT_TYPES)[number];
+export type QuotePages = (typeof QUOTE_PAGES)[number];
+export type QuoteFeature = (typeof QUOTE_FEATURES)[number];
+export type QuoteDesign = (typeof QUOTE_DESIGN)[number];
+export type QuoteTimeline = (typeof QUOTE_TIMELINES)[number];
+
 export type Fact = { value: string; label: string };
 export type ProjectLink = { label: string; href: string };
 
@@ -71,6 +84,7 @@ export type Dictionary = {
     tagline: string;
     viewProjects: string;
     contactMe: string;
+    getQuote: string;
     scroll: string;
   };
 
@@ -133,6 +147,34 @@ export type Dictionary = {
       /** `{name}` is replaced with the visitor's name. */
       subject: string;
     };
+  };
+
+  /** The /quote page: a project brief the visitor fills in to get a price and timeline. */
+  quote: {
+    eyebrow: string;
+    title: string;
+    intro: string;
+    backHome: string;
+    sections: { project: string; scope: string; timing: string; contact: string };
+    projectType: { label: string; options: Record<QuoteProjectType, string> };
+    description: { label: string; placeholder: string };
+    currentUrl: { label: string; placeholder: string };
+    pages: { label: string; options: Record<QuotePages, string> };
+    features: { label: string; options: Record<QuoteFeature, string> };
+    design: { label: string; options: Record<QuoteDesign, string> };
+    timeline: { label: string; options: Record<QuoteTimeline, string> };
+    budget: { label: string; placeholder: string };
+    name: string;
+    email: string;
+    whatsapp: string;
+    country: string;
+    optional: string;
+    send: string;
+    sending: string;
+    success: string;
+    /** Shown when required fields are missing or the email is invalid. */
+    error: string;
+    networkError: string;
   };
 
   footer: {

@@ -18,7 +18,7 @@ function generateId(): string {
 
 /** Persists a new submission. Callers should treat failures as non-fatal — email delivery is the primary channel. */
 export async function saveMessage(
-  data: Pick<ContactMessage, "name" | "email" | "message">,
+  data: Pick<ContactMessage, "name" | "email" | "message" | "kind">,
 ): Promise<void> {
   const message: ContactMessage = {
     id: generateId(),

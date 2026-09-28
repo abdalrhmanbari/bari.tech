@@ -1,6 +1,7 @@
 "use client";
 
 import { Fragment } from "react";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import { useLanguage } from "@/components/i18n/LanguageProvider";
 import { buttonClass } from "@/components/ui/Button";
@@ -126,18 +127,18 @@ export function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={groupTransition(2)}
         >
-          <a
-            href="#projects"
+          <Link
+            href="/quote"
             className={buttonClass("primary", "bp-2xs:w-full bp-2xs:justify-center")}
           >
-            {hero.viewProjects}
-          </a>
+            {hero.getQuote}
+          </Link>
 
           <a
-            href="#contact"
+            href="#projects"
             className={buttonClass("ghost", "bp-2xs:w-full bp-2xs:justify-center")}
           >
-            {hero.contactMe}
+            {hero.viewProjects}
           </a>
         </motion.div>
       </div>

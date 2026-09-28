@@ -76,7 +76,7 @@ export function MessagesPanel() {
         <div>
           <h1 className="text-xl font-medium text-ink-primary">Messages</h1>
           <p className="mt-1 text-sm text-ink-secondary">
-            Submissions from the contact form.
+            Submissions from the contact and quote forms.
             {unreadCount > 0 && ` ${unreadCount} unread.`}
           </p>
         </div>
@@ -130,6 +130,11 @@ export function MessagesPanel() {
                       <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-accent" aria-hidden="true" />
                     )}
                     {m.name}
+                    {m.kind === "quote" && (
+                      <span className="rounded bg-amber-400/15 px-1.5 py-0.5 text-[10px] font-medium uppercase tracking-wide text-amber-300">
+                        Quote request
+                      </span>
+                    )}
                   </p>
                   <a
                     href={`mailto:${m.email}`}

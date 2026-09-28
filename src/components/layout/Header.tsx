@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { useLanguage } from "@/components/i18n/LanguageProvider";
@@ -16,6 +17,10 @@ const metaLink =
 
 export function Header() {
   const { dict } = useLanguage();
+  // Section links are in-page anchors on the home page; elsewhere (e.g.
+  // /quote) they must point back to the home page first.
+  const pathname = usePathname();
+  const toSection = (hash: string) => (pathname === "/" ? hash : `/${hash}`);
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -68,7 +73,7 @@ export function Header() {
       )}
     >
       <a
-        href="#hero"
+        href={toSection("#hero")}
         className="relative z-[95] font-grotesk text-[15px] uppercase tracking-[0.14em]"
         aria-label={dict.homeAria}
       >
@@ -80,7 +85,7 @@ export function Header() {
         <ul className="flex list-none items-center gap-10">
           {dict.nav.map((item) => (
             <li key={item.href}>
-              <a href={item.href} className={HEADER_LINK_CLASS}>
+              <a href={toSection(item.href)} className={HEADER_LINK_CLASS}>
                 {item.label}
               </a>
             </li>
@@ -143,7 +148,7 @@ export function Header() {
                   }}
                 >
                   <a
-                    href={item.href}
+                    href={toSection(item.href)}
                     onClick={() => setMenuOpen(false)}
                     className="flex items-baseline justify-between gap-4 border-t border-hair py-[22px] font-grotesk text-[26px] tracking-[0.02em] text-ink-primary"
                   >
