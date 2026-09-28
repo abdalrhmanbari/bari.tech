@@ -2,14 +2,19 @@
 
 import { useRef, useState, type DragEvent } from "react";
 
-const ACCEPTED_TYPES = "image/png,image/jpeg,image/webp,image/gif,image/svg+xml,image/avif";
+const ACCEPTED_TYPES = {
+  image: "image/png,image/jpeg,image/webp,image/gif,image/svg+xml,image/avif",
+  video: "video/mp4,video/webm",
+};
 
 export function ImageDropField({
   value,
   onChange,
+  media = "image",
 }: {
   value: string;
   onChange: (url: string) => void;
+  media?: "image" | "video";
 }) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [dragging, setDragging] = useState(false);
@@ -60,16 +65,24 @@ export function ImageDropField({
         }`}
       >
         {value ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={value} alt="" className="h-20 w-auto rounded object-cover" />
+          media === "video" ? (
+            <video src={value} muted playsInline preload="metadata" className="h-20 w-auto rounded object-cover" />
+          ) : (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={value} alt="" className="h-20 w-auto rounded object-cover" />
+          )
         ) : null}
         <span className="text-xs text-ink-secondary">
-          {uploading ? "Uploading…" : "Drag & drop an image, or click to browse"}
+          {uploading
+            ? "Uploading…"
+            : media === "video"
+              ? "Drag & drop an MP4/WebM video (max 5MB), or click to browse"
+              : "Drag & drop an image, or click to browse"}
         </span>
         <input
           ref={inputRef}
           type="file"
-          accept={ACCEPTED_TYPES}
+          accept={ACCEPTED_TYPES[media]}
           className="hidden"
           onChange={(e) => {
             const file = e.target.files?.[0];
@@ -78,13 +91,22 @@ export function ImageDropField({
           }}
         />
       </div>
+      {media === "video" && (
+        <input
+          type="url"
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          placeholder="…or paste a video URL (.mp4 / .webm)"
+          className="mt-2 w-full rounded-md border border-white/10 bg-surface px-3 py-2 text-sm text-ink-primary outline-none focus:border-white/30"
+        />
+      )}
       {value && (
         <button
           type="button"
           onClick={() => onChange("")}
           className="mt-1 text-xs text-ink-secondary hover:text-red-400"
         >
-          Remove image
+          Remove {media}
         </button>
       )}
       {error && <p className="mt-1 text-xs text-red-400">{error}</p>}

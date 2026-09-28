@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
 import { MapPin } from "lucide-react";
 import { motion } from "framer-motion";
@@ -20,6 +21,8 @@ export function ProjectCard({
   const reduce = useReducedMotionSafe();
   const tilt = useTilt<HTMLElement>(6);
   const label = String(index + 1).padStart(2, "0");
+  const [videoReady, setVideoReady] = useState(false);
+  const cover = project.video ? project.poster || project.image : project.image;
 
   const revealProps = reduce
     ? {}
@@ -42,18 +45,37 @@ export function ProjectCard({
       onPointerLeave={reduce ? undefined : tilt.onPointerLeave}
     >
       <div className="relative flex min-h-[280px] items-center justify-center overflow-hidden bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.06),transparent_55%),linear-gradient(160deg,#1f1f1f,#131313)]">
-        {project.image ? (
+        {cover || project.video ? (
           <>
-            <Image
-              src={project.image}
-              alt={project.title}
-              fill
-              sizes="(max-width: 820px) 100vw, 50vw"
-              className="object-cover transition-transform duration-500 ease-smooth group-hover:scale-[1.03]"
-            />
+            {cover && (
+              <Image
+                src={cover}
+                alt={project.title}
+                fill
+                sizes="(max-width: 820px) 100vw, 50vw"
+                className="object-cover transition-transform duration-500 ease-smooth group-hover:scale-[1.03]"
+              />
+            )}
+            {project.video && (
+              <video
+                src={project.video}
+                poster={cover}
+                aria-label={project.title}
+                muted
+                loop
+                playsInline
+                autoPlay={!reduce}
+                controls={reduce}
+                preload={reduce ? "none" : "auto"}
+                onCanPlay={() => setVideoReady(true)}
+                className={`absolute inset-0 h-full w-full object-cover transition-[opacity,transform] duration-700 ease-smooth group-hover:scale-[1.03] ${
+                  videoReady || reduce ? "opacity-100" : "opacity-0"
+                }`}
+              />
+            )}
             <span
               aria-hidden="true"
-              className="absolute inset-0 bg-[linear-gradient(160deg,rgba(20,20,20,0.15),rgba(20,20,20,0.6))]"
+              className="pointer-events-none absolute inset-0 bg-[linear-gradient(160deg,rgba(20,20,20,0.15),rgba(20,20,20,0.6))]"
             />
           </>
         ) : (

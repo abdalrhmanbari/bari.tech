@@ -18,6 +18,10 @@ export type ProjectEntry = {
   links: ProjectLink[];
   /** Optional preview image (path under `public/`). Falls back to the index number. */
   image?: string;
+  /** Optional preview video (URL). Plays in place of the image once loaded. */
+  video?: string;
+  /** Image shown while the video loads. Falls back to `image`. */
+  poster?: string;
   /** Country the project's owner / client is based in. */
   country?: string;
   /** What I did on the project (e.g. "Full-Stack Development"). Shown under the title. */

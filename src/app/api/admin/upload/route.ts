@@ -3,6 +3,8 @@ import { NextResponse } from "next/server";
 import { saveImage } from "@/lib/content/images";
 
 const MAX_SIZE = 4 * 1024 * 1024;
+// Netlify Functions reject request bodies over ~6MB, so videos can't go much higher.
+const MAX_VIDEO_SIZE = 5 * 1024 * 1024;
 
 const EXTENSIONS: Record<string, string> = {
   "image/png": "png",
@@ -11,6 +13,8 @@ const EXTENSIONS: Record<string, string> = {
   "image/gif": "gif",
   "image/svg+xml": "svg",
   "image/avif": "avif",
+  "video/mp4": "mp4",
+  "video/webm": "webm",
 };
 
 export async function POST(request: Request) {
@@ -23,12 +27,20 @@ export async function POST(request: Request) {
   const extension = EXTENSIONS[file.type];
   if (!extension) {
     return NextResponse.json(
-      { error: "Unsupported image type. Use PNG, JPEG, WebP, GIF, AVIF, or SVG." },
+      { error: "Unsupported file type. Use PNG, JPEG, WebP, GIF, AVIF, SVG, MP4, or WebM." },
       { status: 400 },
     );
   }
-  if (file.size > MAX_SIZE) {
-    return NextResponse.json({ error: "Image is too large (max 4MB)." }, { status: 400 });
+  const isVideo = file.type.startsWith("video/");
+  if (file.size > (isVideo ? MAX_VIDEO_SIZE : MAX_SIZE)) {
+    return NextResponse.json(
+      {
+        error: isVideo
+          ? "Video is too large (max 5MB). Compress it, or host it elsewhere and paste its URL."
+          : "Image is too large (max 4MB).",
+      },
+      { status: 400 },
+    );
   }
 
   const key = `${Date.now()}-${randomUUID()}.${extension}`;

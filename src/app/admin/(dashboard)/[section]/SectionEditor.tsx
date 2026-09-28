@@ -230,7 +230,7 @@ export function SectionEditor({ section }: { section: SectionKey }) {
                           <Skeleton
                             key={field.key}
                             className={`h-9 ${
-                              field.type === "textarea" || field.type === "image"
+                              field.type === "textarea" || field.type === "image" || field.type === "video"
                                 ? "sm:col-span-2 h-20"
                                 : ""
                             }`}
@@ -368,8 +368,9 @@ export function SectionEditor({ section }: { section: SectionKey }) {
                             <label className="mb-1 block text-xs text-ink-secondary">
                               {field.label}
                             </label>
-                            {field.type === "image" ? (
+                            {field.type === "image" || field.type === "video" ? (
                               <ImageDropField
+                                media={field.type}
                                 value={(row[field.key] as string) ?? ""}
                                 onChange={(url) => updateRow(idx, field.key, url)}
                               />

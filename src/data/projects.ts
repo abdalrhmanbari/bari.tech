@@ -18,6 +18,13 @@ export type Project = {
    * When omitted, the card shows the faded index number instead.
    */
   image?: string;
+  /**
+   * Optional preview video (MP4/WebM URL, or a path under `public/`). Plays
+   * muted and looped in place of the image once it has loaded.
+   */
+  video?: string;
+  /** Image shown while the video loads. Falls back to `image`. */
+  poster?: string;
   /** Country the project's owner / client is based in. Shown next to the tag. */
   country?: string;
   /** What I did on the project (e.g. "Full-Stack Development"). Shown under the title. */

@@ -3,7 +3,7 @@ import type { SectionKey } from "@/lib/content/schema";
 export type RowField = {
   key: string;
   label: string;
-  type: "text" | "textarea" | "checkbox" | "image";
+  type: "text" | "textarea" | "checkbox" | "image" | "video";
 };
 
 export type Row = Record<string, string | boolean>;
@@ -108,6 +108,8 @@ export const SECTION_CONFIGS: Record<SectionKey, SectionConfig> = {
           { key: "linkLabel", label: "Link label", type: "text" },
           { key: "linkHref", label: "Link URL", type: "text" },
           { key: "image", label: "Image", type: "image" },
+          { key: "video", label: "Video (optional)", type: "video" },
+          { key: "poster", label: "Video poster (shown while the video loads)", type: "image" },
           { key: "country", label: "Country", type: "text" },
           { key: "role", label: "My role", type: "text" },
         ],
@@ -119,10 +121,12 @@ export const SECTION_CONFIGS: Record<SectionKey, SectionConfig> = {
           linkLabel: "",
           linkHref: "",
           image: "",
+          video: "",
+          poster: "",
           country: "",
           role: "",
         },
-        sharedFields: ["image", "linkHref", "tech"],
+        sharedFields: ["image", "video", "poster", "linkHref", "tech"],
         toRow: (item) => ({
           title: String(item.title ?? ""),
           tag: String(item.tag ?? ""),
@@ -131,6 +135,8 @@ export const SECTION_CONFIGS: Record<SectionKey, SectionConfig> = {
           linkLabel: String((item.links as Array<{ label?: string }>)?.[0]?.label ?? ""),
           linkHref: String((item.links as Array<{ href?: string }>)?.[0]?.href ?? ""),
           image: String(item.image ?? ""),
+          video: String(item.video ?? ""),
+          poster: String(item.poster ?? ""),
           country: String(item.country ?? ""),
           role: String(item.role ?? ""),
         }),
@@ -145,6 +151,8 @@ export const SECTION_CONFIGS: Record<SectionKey, SectionConfig> = {
             tech: listFromCsv(String(row.tech || "")),
             links,
             ...(row.image ? { image: row.image } : {}),
+            ...(row.video ? { video: row.video } : {}),
+            ...(row.poster ? { poster: row.poster } : {}),
             ...(row.country ? { country: row.country } : {}),
             ...(row.role ? { role: row.role } : {}),
           };
