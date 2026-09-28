@@ -22,6 +22,8 @@ export function ProjectCard({
   const tilt = useTilt<HTMLElement>(6);
   const label = String(index + 1).padStart(2, "0");
   const [videoReady, setVideoReady] = useState(false);
+  // Media box follows the file's own aspect ratio so it shows whole, uncropped.
+  const [ratio, setRatio] = useState(16 / 9);
   const cover = project.video ? project.poster || project.image : project.image;
 
   const revealProps = reduce
@@ -38,56 +40,75 @@ export function ProjectCard({
     <motion.article
       ref={tilt.ref}
       data-cursor-grow
-      className="group grid grid-cols-2 overflow-hidden rounded-[18px] border border-hair bg-card shadow-[0_24px_60px_-30px_rgba(0,0,0,0.7)] transition-shadow duration-500 ease-smooth will-change-transform hover:shadow-[0_30px_80px_-20px_rgba(0,0,0,0.85)] bp-sm:grid-cols-1"
+      className="group grid grid-cols-[1.45fr_1fr] overflow-hidden rounded-[18px] border border-hair bg-card shadow-[0_24px_60px_-30px_rgba(0,0,0,0.7)] transition-shadow duration-500 ease-smooth will-change-transform hover:shadow-[0_30px_80px_-20px_rgba(0,0,0,0.85)] bp-xl:grid-cols-1"
       {...revealProps}
       style={reduce ? undefined : tilt.style}
       onPointerMove={reduce ? undefined : tilt.onPointerMove}
       onPointerLeave={reduce ? undefined : tilt.onPointerLeave}
     >
-      <div className="relative flex min-h-[280px] items-center justify-center overflow-hidden bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.06),transparent_55%),linear-gradient(160deg,#1f1f1f,#131313)]">
+      <div className={`relative flex ${cover || project.video ? "" : "min-h-[280px]"} items-center justify-center overflow-hidden bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.06),transparent_55%),linear-gradient(160deg,#1f1f1f,#131313)]`}>
         {cover || project.video ? (
           <>
             {cover && (
               <>
-                {/* Blurred fill behind the letterboxed media, so the full frame shows uncropped. */}
+                {/* Blurred fill for any space the text column adds beyond the media's height. */}
                 <Image
                   src={cover}
                   alt=""
                   aria-hidden="true"
                   fill
-                  sizes="(max-width: 820px) 100vw, 50vw"
-                  className="scale-110 object-cover opacity-40 blur-2xl transition-transform duration-500 ease-smooth group-hover:scale-[1.15]"
+                  sizes="(max-width: 1150px) 100vw, 60vw"
+                  className="scale-110 object-cover opacity-40 blur-2xl"
                 />
                 <span
                   aria-hidden="true"
                   className="pointer-events-none absolute inset-0 bg-[linear-gradient(160deg,rgba(20,20,20,0.15),rgba(20,20,20,0.6))]"
                 />
+              </>
+            )}
+            {/* Sized to the file's own aspect ratio, so the whole frame shows uncropped. */}
+            <div style={{ aspectRatio: ratio }} className="relative w-full">
+              {cover && (
                 <Image
                   src={cover}
                   alt={project.title}
                   fill
-                  sizes="(max-width: 820px) 100vw, 50vw"
+                  sizes="(max-width: 1150px) 100vw, 60vw"
                   className="object-contain"
+                  onLoad={(e) => {
+                    const img = e.currentTarget;
+                    if (!project.video && img.naturalHeight) {
+                      setRatio(img.naturalWidth / img.naturalHeight);
+                    }
+                  }}
                 />
-              </>
-            )}
-            {project.video && (
-              <video
-                src={project.video}
-                poster={cover}
-                aria-label={project.title}
-                muted
-                loop
-                playsInline
-                autoPlay={!reduce}
-                controls={reduce}
-                preload={reduce ? "none" : "auto"}
-                onCanPlay={() => setVideoReady(true)}
-                className={`absolute inset-0 h-full w-full object-contain transition-opacity duration-700 ease-smooth ${
-                  videoReady || reduce ? "opacity-100" : "opacity-0"
-                }`}
-              />
-            )}
+              )}
+              {project.video && (
+                <video
+                  ref={(v) => {
+                    // Metadata may load before hydration, when onLoadedMetadata isn't attached yet.
+                    if (v && v.videoHeight) setRatio(v.videoWidth / v.videoHeight);
+                  }}
+                  src={project.video}
+                  poster={cover}
+                  aria-label={project.title}
+                  muted
+                  loop
+                  playsInline
+                  autoPlay={!reduce}
+                  controls={reduce}
+                  preload={reduce ? "none" : "auto"}
+                  onLoadedMetadata={(e) => {
+                    const v = e.currentTarget;
+                    if (v.videoHeight) setRatio(v.videoWidth / v.videoHeight);
+                  }}
+                  onCanPlay={() => setVideoReady(true)}
+                  className={`absolute inset-0 h-full w-full object-contain transition-opacity duration-700 ease-smooth ${
+                    videoReady || reduce ? "opacity-100" : "opacity-0"
+                  }`}
+                />
+              )}
+            </div>
           </>
         ) : (
           <span
@@ -99,7 +120,7 @@ export function ProjectCard({
         )}
       </div>
 
-      <div className="flex flex-col justify-center px-10 py-11 [@media(max-width:480px)]:px-[26px] [@media(max-width:480px)]:py-9">
+      <div className="flex flex-col justify-center px-9 py-7 [@media(max-width:480px)]:px-[26px] [@media(max-width:480px)]:py-9">
         <p className="mb-4 flex flex-wrap items-center gap-x-2 gap-y-1 text-[12px] uppercase tracking-[0.14em] text-ink-muted">
           <span>{project.tag}</span>
           {project.country && (
@@ -121,11 +142,11 @@ export function ProjectCard({
             {project.role}
           </p>
         )}
-        <p className="mb-[22px] max-w-[440px] text-[15px] text-ink-secondary">
+        <p className="mb-5 max-w-[440px] text-[14px] text-ink-secondary">
           {project.description}
         </p>
 
-        <div className="mb-[26px] flex flex-wrap gap-2">
+        <div className="mb-6 flex flex-wrap gap-2">
           {project.tech.map((tech) => (
             <span
               key={tech}
