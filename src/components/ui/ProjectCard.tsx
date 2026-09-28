@@ -24,7 +24,9 @@ export function ProjectCard({
   const [videoReady, setVideoReady] = useState(false);
   // Media box follows the file's own aspect ratio so it shows whole, uncropped.
   const [ratio, setRatio] = useState(16 / 9);
-  const cover = project.video ? project.poster || project.image : project.image;
+  const cover = project.video
+    ? project.poster || project.image
+    : project.image || project.poster;
 
   const revealProps = reduce
     ? {}
