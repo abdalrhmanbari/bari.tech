@@ -48,13 +48,28 @@ export function ProjectCard({
         {cover || project.video ? (
           <>
             {cover && (
-              <Image
-                src={cover}
-                alt={project.title}
-                fill
-                sizes="(max-width: 820px) 100vw, 50vw"
-                className="object-cover transition-transform duration-500 ease-smooth group-hover:scale-[1.03]"
-              />
+              <>
+                {/* Blurred fill behind the letterboxed media, so the full frame shows uncropped. */}
+                <Image
+                  src={cover}
+                  alt=""
+                  aria-hidden="true"
+                  fill
+                  sizes="(max-width: 820px) 100vw, 50vw"
+                  className="scale-110 object-cover opacity-40 blur-2xl transition-transform duration-500 ease-smooth group-hover:scale-[1.15]"
+                />
+                <span
+                  aria-hidden="true"
+                  className="pointer-events-none absolute inset-0 bg-[linear-gradient(160deg,rgba(20,20,20,0.15),rgba(20,20,20,0.6))]"
+                />
+                <Image
+                  src={cover}
+                  alt={project.title}
+                  fill
+                  sizes="(max-width: 820px) 100vw, 50vw"
+                  className="object-contain"
+                />
+              </>
             )}
             {project.video && (
               <video
@@ -68,15 +83,11 @@ export function ProjectCard({
                 controls={reduce}
                 preload={reduce ? "none" : "auto"}
                 onCanPlay={() => setVideoReady(true)}
-                className={`absolute inset-0 h-full w-full object-cover transition-[opacity,transform] duration-700 ease-smooth group-hover:scale-[1.03] ${
+                className={`absolute inset-0 h-full w-full object-contain transition-opacity duration-700 ease-smooth ${
                   videoReady || reduce ? "opacity-100" : "opacity-0"
                 }`}
               />
             )}
-            <span
-              aria-hidden="true"
-              className="pointer-events-none absolute inset-0 bg-[linear-gradient(160deg,rgba(20,20,20,0.15),rgba(20,20,20,0.6))]"
-            />
           </>
         ) : (
           <span
