@@ -164,7 +164,7 @@ export default async function RootLayout({
 
           <SmoothScroll>
             <Header />
-            <main>{children}</main>
+            <main id="main">{children}</main>
             <Footer />
           </SmoothScroll>
         </LanguageProvider>

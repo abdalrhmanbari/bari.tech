@@ -7,6 +7,7 @@ import { SECTION_KEYS, SECTION_LABELS } from "@/lib/content/schema";
 const NAV_ITEMS = [
   { href: "/admin", label: "Overview" },
   { href: "/admin/messages", label: "Messages" },
+  { href: "/admin/reviews", label: "Reviews" },
   { href: "/admin/stats", label: "Stats" },
   ...SECTION_KEYS.map((key) => ({ href: `/admin/${key}`, label: SECTION_LABELS[key] })),
 ];

@@ -198,6 +198,35 @@ export const en: Dictionary = {
     networkError: "Couldn't send your request — please try again or email me directly.",
   },
 
+  review: {
+    eyebrow: "Leave a Review",
+    title: "How was working with me?",
+    intro:
+      "Thank you for taking a minute to share your experience. Your review helps future clients know what to expect.",
+    project: "Project",
+    projectPlaceholder: "Choose your project",
+    rating: "Your rating",
+    starLabel: "{n} out of 5 stars",
+    name: "Your Name",
+    role: "Your role & company",
+    rolePlaceholder: "e.g. Founder, MAHAM",
+    text: "Your review",
+    textPlaceholder: "How was the communication, the result, and would you recommend working with me?",
+    consent: "I agree to have my name, role, and review shown on this website.",
+    optional: "optional",
+    send: "Submit Review",
+    sending: "Submitting…",
+    success: "Thank you so much! Your review was received.",
+    error: "Please choose your project, a rating, write your review, enter your name, and tick the consent box.",
+    networkError: "Couldn't submit your review — please try again.",
+  },
+
+  testimonials: {
+    eyebrow: "Testimonials",
+    title: "What clients say.",
+    starsLabel: "{n} out of 5 stars",
+  },
+
   footer: {
     builtBy: "Designed & Built by {name}",
   },

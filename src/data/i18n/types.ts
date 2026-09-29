@@ -177,6 +177,39 @@ export type Dictionary = {
     networkError: string;
   };
 
+  /** The private /review page clients use to leave a review (not linked from the site). */
+  review: {
+    eyebrow: string;
+    title: string;
+    intro: string;
+    project: string;
+    projectPlaceholder: string;
+    rating: string;
+    /** `{n}` is replaced with the star number, for the star buttons' labels. */
+    starLabel: string;
+    name: string;
+    role: string;
+    rolePlaceholder: string;
+    text: string;
+    textPlaceholder: string;
+    consent: string;
+    optional: string;
+    send: string;
+    sending: string;
+    success: string;
+    /** Shown when required fields are missing. */
+    error: string;
+    networkError: string;
+  };
+
+  /** The approved-reviews section on the home page. */
+  testimonials: {
+    eyebrow: string;
+    title: string;
+    /** `{n}` is replaced with the rating, for the stars' accessible label. */
+    starsLabel: string;
+  };
+
   footer: {
     /** `{name}` is replaced with `Dictionary.name`. */
     builtBy: string;
