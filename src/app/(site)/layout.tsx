@@ -14,6 +14,7 @@ import { LANG_BOOT_SCRIPT } from "@/components/i18n/langBoot";
 import { Overlays } from "@/components/layout/Overlays";
 import { CustomCursor } from "@/components/layout/CustomCursor";
 import { VisitTracker } from "@/components/analytics/VisitTracker";
+import { GoogleAnalytics } from "@/components/analytics/GoogleAnalytics";
 import { SmoothScroll } from "@/components/layout/SmoothScroll";
 import { SkipLink } from "@/components/layout/SkipLink";
 import { Header } from "@/components/layout/Header";
@@ -159,6 +160,7 @@ export default async function RootLayout({
           <SkipLink />
 
           <VisitTracker />
+          <GoogleAnalytics />
           <Overlays />
           <CustomCursor />
 
