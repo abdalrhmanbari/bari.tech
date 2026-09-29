@@ -7,6 +7,10 @@ const ACCEPTED_TYPES = {
   video: "video/mp4,video/webm",
 };
 
+// Mirrors the limits in /api/admin/upload. Netlify rejects bodies over ~6MB
+// before the route runs (with a plain-text error), so check up front.
+const MAX_BYTES = { image: 4 * 1024 * 1024, video: 5 * 1024 * 1024 };
+
 export function ImageDropField({
   value,
   onChange,
@@ -22,13 +26,24 @@ export function ImageDropField({
   const [error, setError] = useState<string | null>(null);
 
   async function upload(file: File) {
+    const kind = file.type.startsWith("video/") ? "video" : "image";
+    if (file.size > MAX_BYTES[kind]) {
+      const mb = (file.size / 1024 / 1024).toFixed(1);
+      setError(
+        kind === "video"
+          ? `This video is ${mb}MB — the limit is 5MB. Compress or trim it, or paste a video URL instead.`
+          : `This image is ${mb}MB — the limit is 4MB. Export it as JPEG/WebP or resize it.`,
+      );
+      return;
+    }
     setUploading(true);
     setError(null);
     try {
       const formData = new FormData();
       formData.append("file", file);
       const res = await fetch("/api/admin/upload", { method: "POST", body: formData });
-      const body = await res.json();
+      // Platform errors (e.g. body too large) come back as plain text, not JSON.
+      const body = await res.json().catch(() => ({ error: `Upload failed (HTTP ${res.status}).` }));
       if (!res.ok) throw new Error(body.error ?? "Upload failed.");
       onChange(body.url as string);
     } catch (e) {
