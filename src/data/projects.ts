@@ -62,6 +62,8 @@ export const projects: Project[] = [
     tech: ["Next.js", "TypeScript", "Headless WordPress", "Tailwind CSS", "Framer Motion"],
     links: [{ label: "Coming Soon", href: "" }],
     image: "/projects/bombo.png",
+    video: "/projects/bombo-preview-16x9.mp4",
+    poster: "/projects/bombo.png",
     country: "Iraq",
     role: "Full-Stack Development",
   },
