@@ -415,6 +415,7 @@ export const ar: Dictionary = {
     eyebrow: "آراء العملاء",
     title: "ماذا يقول العملاء.",
     starsLabel: "{n} من 5 نجوم",
+    translatedNote: "مترجم من الإنجليزية",
   },
 
   footer: {

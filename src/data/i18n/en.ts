@@ -225,6 +225,7 @@ export const en: Dictionary = {
     eyebrow: "Testimonials",
     title: "What clients say.",
     starsLabel: "{n} out of 5 stars",
+    translatedNote: "Translated from Arabic",
   },
 
   footer: {

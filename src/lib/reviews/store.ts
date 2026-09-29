@@ -1,5 +1,5 @@
 import { getStore } from "@netlify/blobs";
-import type { PublicReview, Review } from "./schema";
+import type { PublicReview, Review, ReviewTranslation } from "./schema";
 
 const STORE_NAME = "client-reviews";
 
@@ -50,7 +50,23 @@ export async function listApprovedReviews(): Promise<PublicReview[]> {
   const reviews = await listReviews();
   return reviews
     .filter((r) => r.approved)
-    .map(({ id, name, role, project, rating, text, lang }) => ({ id, name, role, project, rating, text, lang }));
+    .map(({ id, name, role, project, rating, text, lang, translation }) => ({
+      id, name, role, project, rating, text, lang,
+      ...(translation?.text ? { translation } : {}),
+    }));
+}
+
+/**
+ * Saves (or, with empty text, clears) the translation into the other
+ * language. Throws if Netlify Blobs isn't reachable.
+ */
+export async function setReviewTranslation(id: string, translation: ReviewTranslation): Promise<void> {
+  const current = (await store().get(id, { type: "json" })) as Review | null;
+  if (!current) return;
+  const next: Review = { ...current };
+  delete next.translation;
+  if (translation.text) next.translation = translation;
+  await store().setJSON(id, next);
 }
 
 /** Throws if Netlify Blobs isn't reachable — callers surface this to the admin UI. */

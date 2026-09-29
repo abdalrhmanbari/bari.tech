@@ -1,8 +1,81 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import type { Review } from "@/lib/reviews/schema";
+import type { Review, ReviewTranslation } from "@/lib/reviews/schema";
 import { Skeleton } from "@/components/ui/Skeleton";
+
+const LANG_NAMES = { en: "English", ar: "Arabic" } as const;
+
+const fieldClass =
+  "w-full rounded-md border border-white/10 bg-surface px-3 py-2 text-sm text-ink-primary outline-none focus:border-white/30";
+
+/** Edits the translation of one review into the language it wasn't written in. */
+function TranslationEditor({
+  review,
+  onSaved,
+}: {
+  review: Review;
+  onSaved: (translation: ReviewTranslation | undefined) => void;
+}) {
+  const target = review.lang === "ar" ? "en" : "ar";
+  const [text, setText] = useState(review.translation?.text ?? "");
+  const [role, setRole] = useState(review.translation?.role ?? "");
+  const [status, setStatus] = useState<"idle" | "saving" | "saved" | "error">("idle");
+  const dirty = text !== (review.translation?.text ?? "") || role !== (review.translation?.role ?? "");
+
+  async function save() {
+    setStatus("saving");
+    try {
+      const res = await fetch("/api/admin/reviews", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: review.id, translation: { text, role } }),
+      });
+      if (!res.ok) throw new Error();
+      onSaved(text.trim() ? { text: text.trim(), role: role.trim() } : undefined);
+      setStatus("saved");
+    } catch {
+      setStatus("error");
+    }
+  }
+
+  return (
+    <div className="mb-3 rounded-md border border-white/10 bg-white/[0.02] p-3">
+      <p className="mb-2 text-xs text-ink-secondary">
+        Translation into {LANG_NAMES[target]} — shown to {LANG_NAMES[target]} visitors, labelled as translated.
+        Leave empty to show the original to everyone.
+      </p>
+      <textarea
+        rows={3}
+        dir={target === "ar" ? "rtl" : "ltr"}
+        value={text}
+        onChange={(e) => { setText(e.target.value); setStatus("idle"); }}
+        placeholder={`Review in ${LANG_NAMES[target]}`}
+        className={`${fieldClass} mb-2`}
+      />
+      <input
+        type="text"
+        dir={target === "ar" ? "rtl" : "ltr"}
+        value={role}
+        onChange={(e) => { setRole(e.target.value); setStatus("idle"); }}
+        placeholder={review.role ? `Role in ${LANG_NAMES[target]} (original: ${review.role})` : `Role in ${LANG_NAMES[target]} (optional)`}
+        className={`${fieldClass} mb-2`}
+      />
+      <div className="flex items-center gap-3 text-xs">
+        <button
+          type="button"
+          onClick={save}
+          disabled={!dirty || status === "saving"}
+          className="rounded-md bg-ink-primary px-3 py-1.5 font-medium text-bg-primary transition disabled:opacity-40"
+        >
+          {status === "saving" ? "Saving…" : "Save translation"}
+        </button>
+        {status === "saved" && <span className="text-emerald-400">Saved</span>}
+        {status === "error" && <span className="text-red-400">Save failed — try again.</span>}
+      </div>
+    </div>
+  );
+}
 
 export function ReviewsPanel() {
   const [loading, setLoading] = useState(true);
@@ -152,9 +225,19 @@ export function ReviewsPanel() {
                 {"★".repeat(r.rating)}
                 <span className="text-white/20">{"★".repeat(5 - r.rating)}</span>
               </p>
+              <p className="mb-1 text-[11px] uppercase tracking-wide text-ink-secondary">
+                Original ({LANG_NAMES[r.lang]})
+              </p>
               <p dir="auto" className="mb-3 whitespace-pre-wrap text-sm text-ink-primary/90">
                 {r.text}
               </p>
+
+              <TranslationEditor
+                review={r}
+                onSaved={(translation) =>
+                  setReviews((prev) => prev.map((item) => (item.id === r.id ? { ...item, translation } : item)))
+                }
+              />
 
               <div className="flex flex-wrap gap-3 text-xs">
                 <button

@@ -14,7 +14,18 @@ export type Review = {
   createdAt: string;
   /** Only approved reviews are shown on the site. */
   approved: boolean;
+  /**
+   * Admin-entered translation into the other language. The original `text`
+   * and `role` are never changed; the site shows this to visitors browsing
+   * in the other language, labelled as translated.
+   */
+  translation?: ReviewTranslation;
 };
 
+export type ReviewTranslation = { text: string; role: string };
+
 /** The subset of a review that is sent to the public site. */
-export type PublicReview = Pick<Review, "id" | "name" | "role" | "project" | "rating" | "text" | "lang">;
+export type PublicReview = Pick<
+  Review,
+  "id" | "name" | "role" | "project" | "rating" | "text" | "lang" | "translation"
+>;

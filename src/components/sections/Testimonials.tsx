@@ -8,9 +8,21 @@ import type { PublicReview } from "@/lib/reviews/schema";
 
 /** Approved client reviews. Renders nothing until at least one is approved. */
 export function Testimonials({ reviews }: { reviews: PublicReview[] }) {
-  const { dict } = useLanguage();
+  const { dict, lang } = useLanguage();
   const t = dict.testimonials;
   if (reviews.length === 0) return null;
+
+  // Visitors browsing in the other language see the admin's translation
+  // (if one was entered), labelled as translated; otherwise the original.
+  const localized = reviews.map((r) => {
+    const translated = r.lang !== lang && r.translation?.text ? r.translation : null;
+    return {
+      ...r,
+      text: translated ? translated.text : r.text,
+      role: translated ? translated.role || r.role : r.role,
+      translated: Boolean(translated),
+    };
+  });
 
   return (
     <Section id="testimonials">
@@ -20,7 +32,7 @@ export function Testimonials({ reviews }: { reviews: PublicReview[] }) {
       </Reveal>
 
       <div className="mt-10 grid grid-cols-2 gap-5 bp-md:grid-cols-1">
-        {reviews.map((r) => (
+        {localized.map((r) => (
           <Reveal
             key={r.id}
             className="flex flex-col rounded-2xl border border-hair bg-card px-[30px] py-[32px]"
@@ -33,10 +45,13 @@ export function Testimonials({ reviews }: { reviews: PublicReview[] }) {
               {"★".repeat(r.rating)}
               <span className="text-hair">{"★".repeat(5 - r.rating)}</span>
             </p>
-            <blockquote dir="auto" className="mb-7 flex-1 text-[16px] leading-relaxed text-ink-primary">
+            <blockquote dir="auto" className="flex-1 text-[16px] leading-relaxed text-ink-primary">
               “{r.text}”
             </blockquote>
-            <footer className="border-t border-hair pt-5">
+            {r.translated && (
+              <p className="mt-3 text-[12px] italic text-ink-muted">{t.translatedNote}</p>
+            )}
+            <footer className="mt-7 border-t border-hair pt-5">
               <p className="text-[15px] text-ink-primary">{r.name}</p>
               <p className="mt-1 text-[13px] text-ink-muted">
                 {r.role ? `${r.role} · ` : ""}

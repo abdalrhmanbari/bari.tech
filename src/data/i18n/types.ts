@@ -208,6 +208,8 @@ export type Dictionary = {
     title: string;
     /** `{n}` is replaced with the rating, for the stars' accessible label. */
     starsLabel: string;
+    /** Shown under a review translated from the other language. */
+    translatedNote: string;
   };
 
   footer: {
