@@ -119,13 +119,11 @@
   }
 }
 @media (pointer: fine) and (min-width: 901px) {
+  /* Blanket rule so utilities like `cursor-pointer` (star/pill labels,
+     selects) can't bring the OS cursor back alongside the ring. */
   body.has-custom-cursor,
-  body.has-custom-cursor a,
-  body.has-custom-cursor button,
-  body.has-custom-cursor input,
-  body.has-custom-cursor textarea,
-  body.has-custom-cursor summary {
-    cursor: none;
+  body.has-custom-cursor * {
+    cursor: none !important;
   }
 }
 

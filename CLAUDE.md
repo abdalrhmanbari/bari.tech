@@ -2,6 +2,16 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Workflow rule: explain before fixing
+
+When asked to fix a problem/bug, do NOT start changing code right away. First:
+
+1. Explain the problem — what's going wrong and why (root cause, affected files).
+2. Describe the proposed fix — what you plan to change and where.
+3. Stop and wait for the user's approval. The user may approve, or ask for changes to the plan first.
+
+Only implement the fix after explicit approval.
+
 ## Commands
 
 ```bash

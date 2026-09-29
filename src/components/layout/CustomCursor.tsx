@@ -47,7 +47,7 @@ export function CustomCursor() {
 
     const onOver = (event: MouseEvent) => {
       const el = (event.target as HTMLElement)?.closest(
-        "a, button, input, textarea, [data-cursor-grow]",
+        "a, button, input, textarea, select, label, [data-cursor-grow]",
       );
       ring.classList.toggle("is-grow", Boolean(el));
     };
