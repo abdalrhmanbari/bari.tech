@@ -57,6 +57,63 @@ function useProjectTracking(title: string) {
   return { mediaRef, onTimeUpdate };
 }
 
+/** Start downloading a demo once the card is within this distance of the viewport. */
+const VIDEO_LOAD_MARGIN = "150% 0px";
+/** Play a demo only while at least this much of it is on screen. */
+const VIDEO_PLAY_THRESHOLD = 0.15;
+
+/**
+ * Defers a demo video until its card nears the viewport (so opening the page
+ * doesn't download every demo up front), then plays it only while it's on
+ * screen and pauses it once scrolled away.
+ */
+function useLazyVideo(enabled: boolean) {
+  const boxRef = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const visibleRef = useRef(false);
+  const [near, setNear] = useState(false);
+
+  useEffect(() => {
+    const box = boxRef.current;
+    if (!enabled || !box) return;
+    if (typeof IntersectionObserver === "undefined") {
+      setNear(true);
+      return;
+    }
+    const loader = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+        setNear(true);
+        loader.disconnect();
+      },
+      { rootMargin: VIDEO_LOAD_MARGIN },
+    );
+    const player = new IntersectionObserver(
+      ([entry]) => {
+        visibleRef.current = entry.isIntersecting;
+        const video = videoRef.current;
+        if (!video) return;
+        if (entry.isIntersecting) video.play().catch(() => {});
+        else video.pause();
+      },
+      { threshold: VIDEO_PLAY_THRESHOLD },
+    );
+    loader.observe(box);
+    player.observe(box);
+    return () => {
+      loader.disconnect();
+      player.disconnect();
+    };
+  }, [enabled]);
+
+  /** Starts playback once the file is ready, if the card is already on screen. */
+  function onCanPlay(video: HTMLVideoElement) {
+    if (visibleRef.current) video.play().catch(() => {});
+  }
+
+  return { boxRef, videoRef, near, onCanPlay };
+}
+
 export function ProjectCard({
   project,
   index,
@@ -70,8 +127,12 @@ export function ProjectCard({
   const label = String(index + 1).padStart(2, "0");
   const [videoReady, setVideoReady] = useState(false);
   const tracking = useProjectTracking(project.title);
+  // With reduced motion the demo never autoplays (controls + preload="none"), so it needs no deferring.
+  const lazy = useLazyVideo(!!project.video && !reduce);
   // Media box follows the file's own aspect ratio so it shows whole, uncropped.
   const [ratio, setRatio] = useState(16 / 9);
+  // The poster sizes the box until the (deferred) video's own metadata arrives, so nothing jumps.
+  const videoSizedRef = useRef(false);
   const cover = project.video
     ? project.poster || project.image
     : project.image || project.poster;
@@ -118,7 +179,7 @@ export function ProjectCard({
               </>
             )}
             {/* Sized to the file's own aspect ratio, so the whole frame shows uncropped. */}
-            <div style={{ aspectRatio: ratio }} className="relative w-full">
+            <div ref={lazy.boxRef} style={{ aspectRatio: ratio }} className="relative w-full">
               {cover && (
                 <Image
                   src={cover}
@@ -128,7 +189,7 @@ export function ProjectCard({
                   className="object-contain"
                   onLoad={(e) => {
                     const img = e.currentTarget;
-                    if (!project.video && img.naturalHeight) {
+                    if (!videoSizedRef.current && img.naturalHeight) {
                       setRatio(img.naturalWidth / img.naturalHeight);
                     }
                   }}
@@ -137,23 +198,32 @@ export function ProjectCard({
               {project.video && (
                 <video
                   ref={(v) => {
+                    lazy.videoRef.current = v;
                     // Metadata may load before hydration, when onLoadedMetadata isn't attached yet.
-                    if (v && v.videoHeight) setRatio(v.videoWidth / v.videoHeight);
+                    if (v && v.videoHeight) {
+                      videoSizedRef.current = true;
+                      setRatio(v.videoWidth / v.videoHeight);
+                    }
                   }}
-                  src={project.video}
+                  src={reduce || lazy.near ? project.video : undefined}
                   poster={cover}
                   aria-label={project.title}
                   muted
                   loop
                   playsInline
-                  autoPlay={!reduce}
                   controls={reduce}
                   preload={reduce ? "none" : "auto"}
                   onLoadedMetadata={(e) => {
                     const v = e.currentTarget;
-                    if (v.videoHeight) setRatio(v.videoWidth / v.videoHeight);
+                    if (v.videoHeight) {
+                      videoSizedRef.current = true;
+                      setRatio(v.videoWidth / v.videoHeight);
+                    }
                   }}
-                  onCanPlay={() => setVideoReady(true)}
+                  onCanPlay={(e) => {
+                    setVideoReady(true);
+                    if (!reduce) lazy.onCanPlay(e.currentTarget);
+                  }}
                   onTimeUpdate={tracking.onTimeUpdate}
                   className={`absolute inset-0 h-full w-full object-contain transition-opacity duration-700 ease-smooth ${
                     videoReady || reduce ? "opacity-100" : "opacity-0"
