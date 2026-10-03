@@ -17,7 +17,8 @@ export function GoogleAnalytics() {
           window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
           gtag('js', new Date());
-          gtag('config', '${GA_ID}');
+          // Pages opened by the admin's live viewer aren't real visits.
+          if (location.search.indexOf('live-view') < 0) gtag('config', '${GA_ID}');
         `}
       </Script>
     </>

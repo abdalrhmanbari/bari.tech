@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { isLiveView } from "@/lib/visits/live-types";
 
 /**
  * Two-part pointer treatment from the reference:
@@ -20,7 +21,7 @@ export function CustomCursor() {
     const prefersReduced = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
     ).matches;
-    if (!fine || !wide || prefersReduced) return;
+    if (!fine || !wide || prefersReduced || isLiveView()) return;
 
     const ring = ringRef.current;
     const glow = glowRef.current;

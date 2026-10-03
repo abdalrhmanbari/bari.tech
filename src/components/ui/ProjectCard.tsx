@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { MapPin } from "lucide-react";
 import { motion } from "framer-motion";
@@ -9,6 +9,53 @@ import { revealVariants, revealViewport } from "@/lib/motion";
 import { useReducedMotionSafe } from "@/hooks/useReducedMotionSafe";
 import { useLanguage } from "@/components/i18n/LanguageProvider";
 import type { ProjectEntry } from "@/data/i18n/types";
+import { track } from "@/lib/visits/track";
+
+/** How long a card must stay at least half on screen to count as viewed. */
+const VIEW_DWELL_MS = 1_500;
+
+/**
+ * Reports `project_view` once the card's media has been at least half visible
+ * for VIEW_DWELL_MS, and `video_complete` once its demo has played on screen
+ * for (nearly) its full length — however many loops that took.
+ */
+function useProjectTracking(title: string) {
+  const mediaRef = useRef<HTMLDivElement>(null);
+  const visibleRef = useRef(false);
+  const lastTimeRef = useRef(0);
+  const watchedRef = useRef(0);
+
+  useEffect(() => {
+    const el = mediaRef.current;
+    if (!el || typeof IntersectionObserver === "undefined") return;
+    let timer: number | undefined;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        visibleRef.current = entry.isIntersecting;
+        window.clearTimeout(timer);
+        if (entry.isIntersecting) timer = window.setTimeout(() => track(`project_view:${title}`), VIEW_DWELL_MS);
+      },
+      { threshold: 0.5 },
+    );
+    observer.observe(el);
+    return () => {
+      window.clearTimeout(timer);
+      observer.disconnect();
+    };
+  }, [title]);
+
+  function onTimeUpdate(e: React.SyntheticEvent<HTMLVideoElement>) {
+    const { currentTime, duration } = e.currentTarget;
+    const delta = currentTime - lastTimeRef.current;
+    lastTimeRef.current = currentTime;
+    // timeupdate fires ~4×/s; skip loop wrap-arounds (negative) and seeks (large jumps).
+    if (!visibleRef.current || delta <= 0 || delta > 1) return;
+    watchedRef.current += delta;
+    if (duration && watchedRef.current >= duration * 0.9) track(`video_complete:${title}`);
+  }
+
+  return { mediaRef, onTimeUpdate };
+}
 
 export function ProjectCard({
   project,
@@ -22,6 +69,7 @@ export function ProjectCard({
   const tilt = useTilt<HTMLElement>(6);
   const label = String(index + 1).padStart(2, "0");
   const [videoReady, setVideoReady] = useState(false);
+  const tracking = useProjectTracking(project.title);
   // Media box follows the file's own aspect ratio so it shows whole, uncropped.
   const [ratio, setRatio] = useState(16 / 9);
   const cover = project.video
@@ -42,13 +90,14 @@ export function ProjectCard({
     <motion.article
       ref={tilt.ref}
       data-cursor-grow
+      data-project={project.title}
       className="group grid grid-cols-[1.45fr_1fr] overflow-hidden rounded-[18px] border border-hair bg-card shadow-[0_24px_60px_-30px_rgba(0,0,0,0.7)] transition-shadow duration-500 ease-smooth will-change-transform hover:shadow-[0_30px_80px_-20px_rgba(0,0,0,0.85)] bp-xl:grid-cols-1"
       {...revealProps}
       style={reduce ? undefined : tilt.style}
       onPointerMove={reduce ? undefined : tilt.onPointerMove}
       onPointerLeave={reduce ? undefined : tilt.onPointerLeave}
     >
-      <div className={`relative flex ${cover || project.video ? "" : "min-h-[280px]"} items-center justify-center overflow-hidden bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.06),transparent_55%),linear-gradient(160deg,#1f1f1f,#131313)]`}>
+      <div ref={tracking.mediaRef} className={`relative flex ${cover || project.video ? "" : "min-h-[280px]"} items-center justify-center overflow-hidden bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.06),transparent_55%),linear-gradient(160deg,#1f1f1f,#131313)]`}>
         {cover || project.video ? (
           <>
             {cover && (
@@ -105,6 +154,7 @@ export function ProjectCard({
                     if (v.videoHeight) setRatio(v.videoWidth / v.videoHeight);
                   }}
                   onCanPlay={() => setVideoReady(true)}
+                  onTimeUpdate={tracking.onTimeUpdate}
                   className={`absolute inset-0 h-full w-full object-contain transition-opacity duration-700 ease-smooth ${
                     videoReady || reduce ? "opacity-100" : "opacity-0"
                   }`}

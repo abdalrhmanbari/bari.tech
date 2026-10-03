@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useLanguage } from "@/components/i18n/LanguageProvider";
 import { buttonClass } from "@/components/ui/Button";
 import { cn } from "@/lib/cn";
+import { track } from "@/lib/visits/track";
 import {
   QUOTE_DESIGN,
   QUOTE_FEATURES,
@@ -90,6 +91,7 @@ export function QuoteForm() {
 
     const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(payload.email);
     if (!payload.projectType || !payload.description || !payload.name || !emailOk) {
+      track("form_error:quote");
       setStatus("invalid");
       return;
     }
@@ -104,13 +106,16 @@ export function QuoteForm() {
       if (!res.ok) {
         const detail = await res.json().catch(() => null);
         console.error("Quote form failed:", res.status, detail);
+        track("form_error:quote");
         setStatus(res.status === 422 ? "invalid" : "error");
         return;
       }
       form.reset();
+      track("form_submit:quote");
       setStatus("success");
     } catch (err) {
       console.error("Quote form network error:", err);
+      track("form_error:quote");
       setStatus("error");
     }
   }
@@ -124,7 +129,7 @@ export function QuoteForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} noValidate>
+    <form onSubmit={handleSubmit} noValidate data-track-form="quote">
       <div className="mb-12">
         <p className={legendClass}>01 · {t.sections.project}</p>
         <ChoiceGroup legend={t.projectType.label}>

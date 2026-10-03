@@ -2,6 +2,12 @@ import { NextResponse, type NextRequest } from "next/server";
 import { SESSION_COOKIE_NAME, verifySessionToken } from "@/lib/admin/auth";
 import { endSession, isValidSessionId, startSession, touchSession } from "@/lib/visits/store";
 import { isBot, parseUserAgent, readGeo } from "@/lib/visits/request-info";
+import type { SiteLang } from "@/lib/visits/schema";
+import { normalizeEventName, type TrackedEvent } from "@/lib/visits/events";
+import { isWatched, parseLiveBatch, pushLiveBatch } from "@/lib/visits/live";
+
+/** Upper bound on events accepted per request; a real tab sends a handful at a time. */
+const MAX_EVENTS_PER_REQUEST = 40;
 
 /**
  * Rejects requests whose Origin/Referer host doesn't match the request's own
@@ -53,18 +59,49 @@ function referrerHost(value: unknown, ownHost: string | null): string | null {
   }
 }
 
+function siteLang(value: unknown): SiteLang | undefined {
+  return value === "en" || value === "ar" ? value : undefined;
+}
+
+function parseEvents(value: unknown): TrackedEvent[] {
+  if (!Array.isArray(value)) return [];
+  const events: TrackedEvent[] = [];
+  for (const item of value.slice(0, MAX_EVENTS_PER_REQUEST)) {
+    const name = normalizeEventName((item as { name?: unknown } | null)?.name);
+    if (!name) continue;
+    const raw = (item as { value?: unknown }).value;
+    events.push(typeof raw === "number" && Number.isFinite(raw) ? { name, value: raw } : { name });
+  }
+  return events;
+}
+
+/** Short tracking tag from the landing URL (`?ref=` / utm), lowercased. */
+function tag(value: unknown): string | null {
+  const text = clip(value, 40);
+  return text ? text.toLowerCase().replace(/[^a-z0-9._-]/g, "") || null : null;
+}
+
 type VisitBody = {
-  action?: "start" | "ping" | "leave";
+  action?: "start" | "ping" | "leave" | "watch-check" | "live";
   id?: unknown;
   path?: unknown;
   referrer?: unknown;
   language?: unknown;
+  siteLang?: unknown;
+  events?: unknown;
+  visitNumber?: unknown;
+  source?: unknown;
+  campaign?: unknown;
+  batch?: unknown;
 };
 
 /**
  * Public, unauthenticated endpoint the live site uses to report visits:
  * `start` once per browser tab, `ping` as a heartbeat while the tab is
- * visible, `leave` (via sendBeacon) when it's hidden or closed. The body is
+ * visible, `leave` (via sendBeacon) when it's hidden or closed. `ping` and
+ * `leave` also carry any engagement events the tab has batched since.
+ * `watch-check` asks whether the admin opened a live view of this visit, and
+ * `live` delivers one live-view batch while they have. The body is
  * sent as text so sendBeacon doesn't need a CORS-preflighted content type.
  */
 export async function POST(request: NextRequest) {
@@ -79,15 +116,33 @@ export async function POST(request: NextRequest) {
     body = { action: "start" };
   }
 
+  if (body.action === "watch-check" || body.action === "live") {
+    if (!isValidSessionId(body.id)) {
+      return NextResponse.json({ error: "Invalid session." }, { status: 400 });
+    }
+    if (body.action === "watch-check") {
+      return NextResponse.json({ watched: await isWatched(body.id) });
+    }
+    const batch = parseLiveBatch(body.batch);
+    if (!batch) return NextResponse.json({ error: "Invalid batch." }, { status: 400 });
+    return NextResponse.json({ watched: await pushLiveBatch(body.id, batch) });
+  }
+
   if (body.action === "ping" || body.action === "leave") {
     if (!isValidSessionId(body.id)) {
       return NextResponse.json({ error: "Invalid session." }, { status: 400 });
     }
+    const events = parseEvents(body.events);
     if (body.action === "leave") {
+      if (events.length) await touchSession(body.id, { events }, false);
       await endSession(body.id);
       return NextResponse.json({ ok: true });
     }
-    const known = await touchSession(body.id, clip(body.path) ?? undefined);
+    const known = await touchSession(body.id, {
+      path: clip(body.path) ?? undefined,
+      siteLang: siteLang(body.siteLang),
+      events,
+    });
     return NextResponse.json({ ok: known }, { status: known ? 200 : 404 });
   }
 
@@ -103,6 +158,11 @@ export async function POST(request: NextRequest) {
     ...parseUserAgent(userAgent),
     referrer: referrerHost(body.referrer, request.headers.get("host")),
     language: clip(body.language, 35),
+    siteLang: siteLang(body.siteLang) ?? null,
+    visitNumber:
+      typeof body.visitNumber === "number" && body.visitNumber >= 1 ? Math.min(Math.floor(body.visitNumber), 100_000) : 1,
+    source: tag(body.source),
+    campaign: tag(body.campaign),
     landingPath: path,
     path,
   });

@@ -1,17 +1,32 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import type { VisitStats, VisitorSession } from "@/lib/visits/schema";
+import type { EventStats, VisitStats, VisitorSession } from "@/lib/visits/schema";
 import { Skeleton } from "@/components/ui/Skeleton";
+import { BarList, Card, Empty, StatTile } from "./ui";
+import { LiveViewer } from "./LiveViewer";
+import {
+  ClicksCard,
+  EngagementTiles,
+  FormsCard,
+  NotFoundCard,
+  ProjectsCard,
+  SectionFunnel,
+  SourcesCard,
+  VitalsCard,
+  describeActions,
+} from "./engagement";
 
 const DAYS_SHOWN = 14;
 const CHART_HEIGHT = 140;
 const TOP_COUNTRIES = 10;
+const TOP_BROWSER_LANGS = 8;
 /** Background refresh cadence so "Active now" stays live without a manual reload. */
 const AUTO_REFRESH_MS = 20_000;
 
 type StatsResponse = {
   stats: VisitStats;
+  events?: EventStats;
   active: VisitorSession[];
   recent: VisitorSession[];
 };
@@ -27,6 +42,24 @@ function countryName(code: string | null): string {
     return code;
   }
 }
+
+const languageNames =
+  typeof Intl.DisplayNames === "function" ? new Intl.DisplayNames(["en"], { type: "language" }) : null;
+
+/** "ar-SA" -> "Arabic"; regional variants are folded into their base language. */
+function languageName(tag: string): string {
+  try {
+    return languageNames?.of(tag) ?? tag;
+  } catch {
+    return tag;
+  }
+}
+
+function baseLanguage(tag: string | null): string {
+  return tag ? tag.split("-")[0].toLowerCase() : "unknown";
+}
+
+const SITE_LANG_LABELS: Record<string, string> = { en: "English", ar: "Arabic" };
 
 function location(v: VisitorSession): string {
   return [v.city, countryName(v.countryCode)].filter(Boolean).join(", ");
@@ -71,6 +104,8 @@ export function StatsPanel() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [data, setData] = useState<StatsResponse | null>(null);
+  const [watching, setWatching] = useState<VisitorSession | null>(null);
+  const closeViewer = useCallback(() => setWatching(null), []);
 
   const load = useCallback(async (silent = false) => {
     if (!silent) setLoading(true);
@@ -96,6 +131,7 @@ export function StatsPanel() {
   }, [load]);
 
   const stats = data?.stats;
+  const events = data?.events ?? {};
   const active = data?.active ?? [];
   const recent = data?.recent ?? [];
 
@@ -110,8 +146,21 @@ export function StatsPanel() {
     .slice(0, TOP_COUNTRIES);
   const countryMax = Math.max(1, ...countries.map(([, c]) => c));
 
+  const siteLangs = Object.entries(stats?.byLang ?? {}).sort((a, b) => b[1] - a[1]);
+  const siteLangTotal = siteLangs.reduce((sum, [, c]) => sum + c, 0);
+
+  const browserLangCounts: Record<string, number> = {};
+  for (const v of recent) {
+    const key = baseLanguage(v.language);
+    browserLangCounts[key] = (browserLangCounts[key] ?? 0) + 1;
+  }
+  const browserLangs = Object.entries(browserLangCounts)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, TOP_BROWSER_LANGS);
+
   return (
     <div>
+      {watching && <LiveViewer visitor={watching} onClose={closeViewer} />}
       <div className="mb-4 flex items-center justify-between gap-4">
         <div>
           <h1 className="text-xl font-medium text-ink-primary">Stats</h1>
@@ -161,12 +210,34 @@ export function StatsPanel() {
                   <VisitorRow key={v.id} visitor={v}>
                     <span>on {v.path}</span>
                     <span>{formatDuration(Date.now() - Date.parse(v.startedAt))} on site</span>
+                    <button
+                      type="button"
+                      onClick={() => setWatching(v)}
+                      className="rounded border border-red-400/40 px-2 py-0.5 text-[11px] text-red-300 transition hover:border-red-400 hover:text-red-200"
+                    >
+                      ● Watch live
+                    </button>
                   </VisitorRow>
                 ))}
               </ul>
             )}
           </Card>
 
+          <h2 className="pt-4 text-sm font-medium text-ink-primary">What visitors do</h2>
+          <EngagementTiles events={events} recent={recent} />
+          <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+            <SectionFunnel events={events} />
+            <FormsCard events={events} />
+          </div>
+          <ProjectsCard events={events} />
+          <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+            <ClicksCard events={events} />
+            {stats && <SourcesCard stats={stats} />}
+          </div>
+          <VitalsCard events={events} />
+          <NotFoundCard events={events} />
+
+          <h2 className="pt-4 text-sm font-medium text-ink-primary">Who visits</h2>
           <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
             <Card title={`Last ${DAYS_SHOWN} days`}>
               <div className="flex gap-1.5" style={{ height: CHART_HEIGHT }}>
@@ -221,6 +292,40 @@ export function StatsPanel() {
             </Card>
           </div>
 
+          <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+            <Card title="Site language (all visits)">
+              {siteLangTotal === 0 ? (
+                <Empty>No language data yet.</Empty>
+              ) : (
+                <BarList
+                  rows={siteLangs.map(([code, count]) => ({
+                    key: code,
+                    label: SITE_LANG_LABELS[code] ?? code,
+                    badge: code.toUpperCase(),
+                    value: `${Math.round((count / siteLangTotal) * 100)}% · ${count.toLocaleString()}`,
+                    ratio: count / siteLangTotal,
+                  }))}
+                />
+              )}
+            </Card>
+
+            <Card title={`Browser language (last ${recent.length} visitors)`}>
+              {browserLangs.length === 0 ? (
+                <Empty>No language data yet.</Empty>
+              ) : (
+                <BarList
+                  rows={browserLangs.map(([code, count]) => ({
+                    key: code,
+                    label: code === "unknown" ? "Unknown" : languageName(code),
+                    badge: code === "unknown" ? "??" : code.toUpperCase(),
+                    value: count.toLocaleString(),
+                    ratio: count / Math.max(1, browserLangs[0][1]),
+                  }))}
+                />
+              )}
+            </Card>
+          </div>
+
           <Card title={`Recent visitors (last ${recent.length})`}>
             {recent.length === 0 ? (
               <Empty>No visits recorded yet.</Empty>
@@ -229,7 +334,7 @@ export function StatsPanel() {
                 {recent.map((v) => (
                   <VisitorRow key={v.id} visitor={v}>
                     <span>{formatTime(v.startedAt)}</span>
-                    <span>{v.referrer ? `from ${v.referrer}` : "Direct"}</span>
+                    <span>{v.source ? `via ?ref=${v.source}` : v.referrer ? `from ${v.referrer}` : "Direct"}</span>
                     <span>stayed {formatDuration(sessionLength(v))}</span>
                   </VisitorRow>
                 ))}
@@ -242,40 +347,6 @@ export function StatsPanel() {
   );
 }
 
-function StatTile({ label, value, live = false }: { label: string; value: number; live?: boolean }) {
-  return (
-    <div className="rounded-lg border border-white/10 bg-card p-4">
-      <p className="mb-1 flex items-center gap-2 text-xs text-ink-secondary">
-        {live && (
-          <span className="relative flex h-2 w-2" aria-hidden="true">
-            {value > 0 && (
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-            )}
-            <span
-              className={`relative inline-flex h-2 w-2 rounded-full ${value > 0 ? "bg-emerald-400" : "bg-ink-muted"}`}
-            />
-          </span>
-        )}
-        {label}
-      </p>
-      <p className="text-2xl font-medium text-ink-primary">{value.toLocaleString()}</p>
-    </div>
-  );
-}
-
-function Card({ title, children }: { title: string; children: React.ReactNode }) {
-  return (
-    <section className="rounded-lg border border-white/10 bg-card p-4">
-      <h2 className="mb-4 text-xs text-ink-secondary">{title}</h2>
-      {children}
-    </section>
-  );
-}
-
-function Empty({ children }: { children: React.ReactNode }) {
-  return <p className="py-6 text-center text-sm text-ink-muted">{children}</p>;
-}
-
 function CountryCode({ code }: { code: string | null }) {
   return (
     <span className="inline-flex w-7 shrink-0 justify-center rounded border border-white/10 py-0.5 text-[10px] font-medium text-ink-secondary">
@@ -285,15 +356,26 @@ function CountryCode({ code }: { code: string | null }) {
 }
 
 function VisitorRow({ visitor, children }: { visitor: VisitorSession; children: React.ReactNode }) {
+  const actions = describeActions(visitor.actions);
   return (
     <li className="flex flex-col gap-1 py-2.5 first:pt-0 last:pb-0 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
       <div className="flex min-w-0 items-center gap-2.5">
         <CountryCode code={visitor.countryCode} />
         <div className="min-w-0">
-          <p className="truncate text-sm text-ink-primary">{location(visitor)}</p>
+          <p className="truncate text-sm text-ink-primary">
+            {location(visitor)}
+            {(visitor.visitNumber ?? 1) > 1 && (
+              <span className="ms-2 rounded border border-accent/40 px-1.5 py-px text-[10px] text-accent">
+                returning · visit #{visitor.visitNumber}
+              </span>
+            )}
+          </p>
           <p className="truncate text-xs text-ink-muted">
             {visitor.device} · {visitor.browser} · {visitor.os}
+            {visitor.language && <> · {visitor.language}</>}
+            {visitor.siteLang && <> · viewing in {SITE_LANG_LABELS[visitor.siteLang]}</>}
           </p>
+          {actions.length > 0 && <p className="mt-0.5 text-xs text-ink-secondary">{actions.join(" · ")}</p>}
         </div>
       </div>
       <div className="flex flex-wrap gap-x-3 gap-y-0.5 ps-[38px] text-xs text-ink-secondary sm:shrink-0 sm:ps-0">

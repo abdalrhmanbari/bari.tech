@@ -14,6 +14,7 @@ import { LANG_BOOT_SCRIPT } from "@/components/i18n/langBoot";
 import { Overlays } from "@/components/layout/Overlays";
 import { CustomCursor } from "@/components/layout/CustomCursor";
 import { VisitTracker } from "@/components/analytics/VisitTracker";
+import { EngagementTracker } from "@/components/analytics/EngagementTracker";
 import { GoogleAnalytics } from "@/components/analytics/GoogleAnalytics";
 import { SmoothScroll } from "@/components/layout/SmoothScroll";
 import { SkipLink } from "@/components/layout/SkipLink";
@@ -72,6 +73,10 @@ export const metadata: Metadata = {
     title: site.meta.title,
     description: site.meta.description,
   },
+  // Google Search Console ownership check (the "HTML tag" method's content value).
+  ...(process.env.GOOGLE_SITE_VERIFICATION
+    ? { verification: { google: process.env.GOOGLE_SITE_VERIFICATION } }
+    : {}),
   robots: {
     index: true,
     follow: true,
@@ -160,6 +165,7 @@ export default async function RootLayout({
           <SkipLink />
 
           <VisitTracker />
+          <EngagementTracker />
           <GoogleAnalytics />
           <Overlays />
           <CustomCursor />

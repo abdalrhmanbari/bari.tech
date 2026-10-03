@@ -8,7 +8,7 @@ import {
   useState,
 } from "react";
 import type { Dictionary, Lang } from "@/data/i18n/types";
-import { LANG_STORAGE_KEY } from "./langBoot";
+import { LANG_STORAGE_KEY, liveViewLang } from "./langBoot";
 
 type LanguageContextValue = {
   lang: Lang;
@@ -37,6 +37,11 @@ export function LanguageProvider({
   const [lang, setLangState] = useState<Lang>("en");
 
   useEffect(() => {
+    const forced = liveViewLang();
+    if (forced) {
+      setLangState(forced);
+      return;
+    }
     try {
       const stored = window.localStorage.getItem(LANG_STORAGE_KEY);
       if (isLang(stored)) setLangState(stored);
@@ -49,6 +54,7 @@ export function LanguageProvider({
     const root = document.documentElement;
     root.lang = lang;
     root.dir = lang === "ar" ? "rtl" : "ltr";
+    if (liveViewLang()) return;
     try {
       window.localStorage.setItem(LANG_STORAGE_KEY, lang);
     } catch {

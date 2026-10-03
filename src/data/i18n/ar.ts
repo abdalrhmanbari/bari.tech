@@ -423,6 +423,12 @@ export const ar: Dictionary = {
   },
 
   footer: {
-    builtBy: "تصميم وتطوير {name}",
+    builtBy: "تطوير {name}",
+  },
+  notFound: {
+    eyebrow: "404",
+    title: "هذه الصفحة غير موجودة.",
+    text: "ربما الرابط قديم أو فيه خطأ. باقي الموقع موجود كما هو.",
+    home: "العودة إلى الرئيسية",
   },
 };

@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import { MotionConfig } from "framer-motion";
 import Lenis from "lenis";
+import { isLiveView } from "@/lib/visits/live-types";
 
 const HEADER_OFFSET = 72;
 
@@ -15,6 +16,8 @@ const HEADER_OFFSET = 72;
  */
 export function SmoothScroll({ children }: { children: React.ReactNode }) {
   useEffect(() => {
+    // The admin's live viewer drives scrolling directly; Lenis would fight it.
+    if (isLiveView()) return;
     const prefersReduced = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
     ).matches;

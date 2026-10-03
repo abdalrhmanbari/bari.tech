@@ -5,6 +5,7 @@ import { CONTACT_ENDPOINT } from "@/data/site";
 import { useLanguage } from "@/components/i18n/LanguageProvider";
 import { buttonClass } from "@/components/ui/Button";
 import { cn } from "@/lib/cn";
+import { track } from "@/lib/visits/track";
 
 type Status = "idle" | "submitting" | "success" | "invalid" | "error";
 
@@ -30,6 +31,7 @@ export function ContactForm() {
 
     const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
     if (!name || !message || !emailOk) {
+      track("form_error:contact");
       setStatus("invalid");
       return;
     }
@@ -47,19 +49,22 @@ export function ContactForm() {
       if (!res.ok) {
         const detail = await res.json().catch(() => null);
         console.error("Contact form failed:", res.status, detail);
+        track("form_error:contact");
         setStatus(res.status === 422 ? "invalid" : "error");
         return;
       }
       form.reset();
+      track("form_submit:contact");
       setStatus("success");
     } catch (err) {
       console.error("Contact form network error:", err);
+      track("form_error:contact");
       setStatus("error");
     }
   }
 
   return (
-    <form onSubmit={handleSubmit} noValidate>
+    <form onSubmit={handleSubmit} noValidate data-track-form="contact">
       <div className={fieldClass}>
         <label htmlFor="cf-name" className={labelClass}>
           {t.name}

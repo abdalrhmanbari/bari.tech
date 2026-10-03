@@ -229,6 +229,12 @@ export const en: Dictionary = {
   },
 
   footer: {
-    builtBy: "Designed & Built by {name}",
+    builtBy: "Built by {name}",
+  },
+  notFound: {
+    eyebrow: "404",
+    title: "This page doesn't exist.",
+    text: "The link may be old or mistyped. Everything else is still here.",
+    home: "Back to home",
   },
 };

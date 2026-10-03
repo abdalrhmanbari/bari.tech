@@ -216,4 +216,12 @@ export type Dictionary = {
     /** `{name}` is replaced with `Dictionary.name`. */
     builtBy: string;
   };
+
+  /** The 404 page. */
+  notFound: {
+    eyebrow: string;
+    title: string;
+    text: string;
+    home: string;
+  };
 };

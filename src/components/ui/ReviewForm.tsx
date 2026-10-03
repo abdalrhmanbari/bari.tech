@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useLanguage } from "@/components/i18n/LanguageProvider";
 import { buttonClass } from "@/components/ui/Button";
 import { cn } from "@/lib/cn";
+import { track } from "@/lib/visits/track";
 
 type Status = "idle" | "submitting" | "success" | "invalid" | "error";
 
@@ -41,6 +42,7 @@ export function ReviewForm({ initialProject = "" }: { initialProject?: string })
     };
 
     if (!payload.project || !rating || !payload.name || !payload.text || !payload.consent) {
+      track("form_error:review");
       setStatus("invalid");
       return;
     }
@@ -55,12 +57,15 @@ export function ReviewForm({ initialProject = "" }: { initialProject?: string })
       if (!res.ok) {
         const detail = await res.json().catch(() => null);
         console.error("Review form failed:", res.status, detail);
+        track("form_error:review");
         setStatus(res.status === 422 ? "invalid" : "error");
         return;
       }
+      track("form_submit:review");
       setStatus("success");
     } catch (err) {
       console.error("Review form network error:", err);
+      track("form_error:review");
       setStatus("error");
     }
   }
@@ -76,7 +81,7 @@ export function ReviewForm({ initialProject = "" }: { initialProject?: string })
   const shown = hover || rating;
 
   return (
-    <form onSubmit={handleSubmit} noValidate>
+    <form onSubmit={handleSubmit} noValidate data-track-form="review">
       <div className={fieldClass}>
         <label htmlFor="rf-project" className={labelClass}>{t.project}</label>
         <select id="rf-project" name="project" defaultValue={preselected} required className={cn(inputClass, "appearance-none")}>
