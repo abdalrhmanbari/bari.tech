@@ -20,6 +20,9 @@ const DAYS_SHOWN = 14;
 const CHART_HEIGHT = 140;
 const TOP_COUNTRIES = 10;
 const TOP_BROWSER_LANGS = 8;
+/** Recent visitors shown at first, and how many more each "Load more" reveals. */
+const RECENT_INITIAL = 3;
+const RECENT_STEP = 10;
 /** Background refresh cadence so "Active now" stays live without a manual reload. */
 const AUTO_REFRESH_MS = 20_000;
 
@@ -103,6 +106,8 @@ export function StatsPanel() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [data, setData] = useState<StatsResponse | null>(null);
+  // Survives the background refresh, so the list doesn't collapse while you're reading it.
+  const [recentShown, setRecentShown] = useState(RECENT_INITIAL);
 
   const load = useCallback(async (silent = false) => {
     if (!silent) setLoading(true);
@@ -323,19 +328,42 @@ export function StatsPanel() {
             </Card>
           </div>
 
-          <Card title={`Recent visitors (last ${recent.length})`}>
+          <Card title={`Recent visitors (${Math.min(recentShown, recent.length)} of ${recent.length})`}>
             {recent.length === 0 ? (
               <Empty>No visits recorded yet.</Empty>
             ) : (
-              <ul className="divide-y divide-white/5">
-                {recent.map((v) => (
-                  <VisitorRow key={v.id} visitor={v}>
-                    <span>{formatTime(v.startedAt)}</span>
-                    <span>{v.source ? `via ?ref=${v.source}` : v.referrer ? `from ${v.referrer}` : "Direct"}</span>
-                    <span>stayed {formatDuration(sessionLength(v))}</span>
-                  </VisitorRow>
-                ))}
-              </ul>
+              <>
+                <ul className="divide-y divide-white/5">
+                  {recent.slice(0, recentShown).map((v) => (
+                    <VisitorRow key={v.id} visitor={v}>
+                      <span>{formatTime(v.startedAt)}</span>
+                      <span>{v.source ? `via ?ref=${v.source}` : v.referrer ? `from ${v.referrer}` : "Direct"}</span>
+                      <span>stayed {formatDuration(sessionLength(v))}</span>
+                    </VisitorRow>
+                  ))}
+                </ul>
+                {recent.length > RECENT_INITIAL && (
+                  <div className="mt-4 flex justify-center">
+                    {recentShown < recent.length ? (
+                      <button
+                        type="button"
+                        onClick={() => setRecentShown((n) => n + RECENT_STEP)}
+                        className="rounded-md border border-white/10 px-4 py-1.5 text-xs text-ink-secondary transition hover:border-white/20 hover:text-ink-primary"
+                      >
+                        Load more ({Math.min(RECENT_STEP, recent.length - recentShown)})
+                      </button>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => setRecentShown(RECENT_INITIAL)}
+                        className="rounded-md border border-white/10 px-4 py-1.5 text-xs text-ink-secondary transition hover:border-white/20 hover:text-ink-primary"
+                      >
+                        Show less
+                      </button>
+                    )}
+                  </div>
+                )}
+              </>
             )}
           </Card>
         </div>
