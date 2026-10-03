@@ -31,13 +31,21 @@ function sameView(a: View | null, b: View): boolean {
   return !!a && a.path === b.path && a.lang === b.lang && a.vw === b.vw && a.vh === b.vh;
 }
 
+/** Closes this tab; if the browser refuses (tab wasn't opened by the dashboard), goes back to Stats. */
+function closeTab() {
+  window.close();
+  window.setTimeout(() => window.location.assign("/admin/stats"), 200);
+}
+
 /**
- * Full-screen "Watch live" view of one visitor: renders the page they're on
- * at their viewport size, then replays their pointer, clicks and scrolling
- * over it, a second or two behind real time.
+ * "Watch live" view of one visitor, in its own tab: renders the page they're
+ * on at their viewport size, then replays their pointer, clicks and
+ * scrolling over it, a second or two behind real time.
  */
-export function LiveViewer({ visitor, onClose }: { visitor: VisitorSession; onClose: () => void }) {
+export function LiveViewer({ visitorId }: { visitorId: string }) {
   const [status, setStatus] = useState<Status>("connecting");
+  /** Last known session details, kept after the visitor leaves so the header doesn't go blank. */
+  const [visitor, setVisitor] = useState<VisitorSession | null>(null);
   const [view, setView] = useState<View | null>(null);
   const [log, setLog] = useState<LogEntry[]>([]);
   const [box, setBox] = useState({ w: 0, h: 0 });
@@ -64,20 +72,25 @@ export function LiveViewer({ visitor, onClose }: { visitor: VisitorSession; onCl
 
   // Watch lease: tells the visitor's tab to start streaming, renewed while this view is open.
   useEffect(() => {
-    const url = `/api/admin/live?id=${encodeURIComponent(visitor.id)}`;
+    const url = `/api/admin/live?id=${encodeURIComponent(visitorId)}`;
     const renew = () =>
       fetch(url, { method: "POST" })
         .then((res) => {
           if (!res.ok) setStatus("error");
         })
         .catch(() => setStatus("error"));
+    // Closing the tab skips React cleanup, so also stop the stream on pagehide
+    // (otherwise it would keep running until the lease expires).
+    const stop = () => fetch(url, { method: "DELETE", keepalive: true }).catch(() => {});
     renew();
     const timer = window.setInterval(renew, RENEW_MS);
+    window.addEventListener("pagehide", stop);
     return () => {
       window.clearInterval(timer);
-      fetch(url, { method: "DELETE", keepalive: true }).catch(() => {});
+      window.removeEventListener("pagehide", stop);
+      stop();
     };
-  }, [visitor.id]);
+  }, [visitorId]);
 
   // Poll for new batches.
   useEffect(() => {
@@ -88,11 +101,12 @@ export function LiveViewer({ visitor, onClose }: { visitor: VisitorSession; onCl
       if (busy) return;
       busy = true;
       try {
-        const res = await fetch(`/api/admin/live?id=${encodeURIComponent(visitor.id)}&since=${since}`, {
+        const res = await fetch(`/api/admin/live?id=${encodeURIComponent(visitorId)}&since=${since}`, {
           cache: "no-store",
         });
         if (!res.ok) return;
-        const body = (await res.json()) as { batches: LiveBatch[]; active: boolean };
+        const body = (await res.json()) as { batches: LiveBatch[]; session: VisitorSession | null };
+        if (body.session) setVisitor(body.session);
         for (const batch of body.batches) {
           since = Math.max(since, batch.seq);
           lastBatchAt = Date.now();
@@ -102,7 +116,7 @@ export function LiveViewer({ visitor, onClose }: { visitor: VisitorSession; onCl
         }
         setStatus((prev) => {
           if (prev === "error") return prev;
-          if (!body.active) return "left";
+          if (!body.session) return "left";
           if (lastBatchAt === 0) return "connecting";
           return Date.now() - lastBatchAt > PAUSED_AFTER_MS ? "paused" : "live";
         });
@@ -113,7 +127,7 @@ export function LiveViewer({ visitor, onClose }: { visitor: VisitorSession; onCl
       }
     }, POLL_MS);
     return () => window.clearInterval(timer);
-  }, [visitor.id]);
+  }, [visitorId]);
 
   // Fit the visitor's viewport into the available space.
   useEffect(() => {
@@ -125,13 +139,6 @@ export function LiveViewer({ visitor, onClose }: { visitor: VisitorSession; onCl
     observer.observe(el);
     return () => observer.disconnect();
   }, []);
-
-  // Close on Escape.
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [onClose]);
 
   // Playback loop: applies queued frames at their (delayed) original timing.
   useEffect(() => {
@@ -204,12 +211,7 @@ export function LiveViewer({ visitor, onClose }: { visitor: VisitorSession; onCl
     status === "live" ? "bg-emerald-400" : status === "left" || status === "error" ? "bg-red-400" : "bg-amber-400";
 
   return (
-    <div
-      role="dialog"
-      aria-modal="true"
-      aria-label="Live view"
-      className="fixed inset-0 z-50 flex flex-col bg-black/90 p-4 backdrop-blur-sm"
-    >
+    <main className="flex h-[100dvh] flex-col bg-black p-3 sm:p-4">
       <div className="mb-3 flex items-center justify-between gap-4">
         <div className="min-w-0">
           <p className="flex items-center gap-2 text-sm text-ink-primary">
@@ -217,13 +219,15 @@ export function LiveViewer({ visitor, onClose }: { visitor: VisitorSession; onCl
             {STATUS_TEXT[status]}
           </p>
           <p className="truncate text-xs text-ink-muted">
-            {[visitor.city, visitor.countryCode].filter(Boolean).join(", ")} · {visitor.device} · {visitor.browser}
+            {visitor
+              ? `${[visitor.city, visitor.countryCode].filter(Boolean).join(", ") || "Unknown location"} · ${visitor.device} · ${visitor.browser}`
+              : "Visitor"}
             {view && ` · ${view.vw}×${view.vh}`}
           </p>
         </div>
         <button
           type="button"
-          onClick={onClose}
+          onClick={closeTab}
           className="shrink-0 rounded-md border border-white/10 px-3 py-1.5 text-xs text-ink-secondary transition hover:border-white/20 hover:text-ink-primary"
         >
           Close
@@ -289,6 +293,6 @@ export function LiveViewer({ visitor, onClose }: { visitor: VisitorSession; onCl
           </p>
         </aside>
       </div>
-    </div>
+    </main>
   );
 }

@@ -27,7 +27,8 @@ export async function GET(request: NextRequest) {
   if (!id) return NextResponse.json({ error: "Invalid session." }, { status: 400 });
   const since = Number(request.nextUrl.searchParams.get("since") ?? 0) || 0;
   const [batches, session] = await Promise.all([getLiveBatches(id, since), getActiveSession(id)]);
-  return NextResponse.json({ batches, active: session !== null });
+  // `session` is null once the visitor's tab is closed (no recent heartbeat).
+  return NextResponse.json({ batches, session });
 }
 
 export async function DELETE(request: NextRequest) {

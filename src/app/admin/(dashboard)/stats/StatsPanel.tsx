@@ -4,7 +4,6 @@ import { useCallback, useEffect, useState } from "react";
 import type { EventStats, VisitStats, VisitorSession } from "@/lib/visits/schema";
 import { Skeleton } from "@/components/ui/Skeleton";
 import { BarList, Card, Empty, StatTile } from "./ui";
-import { LiveViewer } from "./LiveViewer";
 import {
   ClicksCard,
   EngagementTiles,
@@ -104,8 +103,6 @@ export function StatsPanel() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [data, setData] = useState<StatsResponse | null>(null);
-  const [watching, setWatching] = useState<VisitorSession | null>(null);
-  const closeViewer = useCallback(() => setWatching(null), []);
 
   const load = useCallback(async (silent = false) => {
     if (!silent) setLoading(true);
@@ -160,7 +157,6 @@ export function StatsPanel() {
 
   return (
     <div>
-      {watching && <LiveViewer visitor={watching} onClose={closeViewer} />}
       <div className="mb-4 flex items-center justify-between gap-4">
         <div>
           <h1 className="text-xl font-medium text-ink-primary">Stats</h1>
@@ -210,13 +206,14 @@ export function StatsPanel() {
                   <VisitorRow key={v.id} visitor={v}>
                     <span>on {v.path}</span>
                     <span>{formatDuration(Date.now() - Date.parse(v.startedAt))} on site</span>
-                    <button
-                      type="button"
-                      onClick={() => setWatching(v)}
+                    {/* Named target: clicking again for the same visitor reuses their tab. */}
+                    <a
+                      href={`/admin/live/${v.id}`}
+                      target={`live-${v.id}`}
                       className="rounded border border-red-400/40 px-2 py-0.5 text-[11px] text-red-300 transition hover:border-red-400 hover:text-red-200"
                     >
-                      ● Watch live
-                    </button>
+                      ● Watch live ↗
+                    </a>
                   </VisitorRow>
                 ))}
               </ul>
